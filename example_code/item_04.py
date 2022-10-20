@@ -96,9 +96,9 @@ for i, (item, count) in enumerate(pantry):
 
 
 # Example 7
-template = '%s loves food. See %s cook.'
+template1 = '%s loves food. See %s cook.'
 name = 'Max'
-formatted = template % (name, name)
+formatted = template1 % (name, name)
 print(formatted)
 
 
@@ -149,7 +149,7 @@ for i, (item, count) in enumerate(pantry):
     }
 
     assert before == after
-
+#krkrkr
 
 # Example 12
 soup = 'lentil'
@@ -219,7 +219,7 @@ for i, (item, count) in enumerate(pantry):
         i + 1,
         item.title(),
         round(count))
-
+    print(old_style , new_style)
     assert old_style == new_style
 
 
