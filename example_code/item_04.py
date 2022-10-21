@@ -121,7 +121,7 @@ reordered = '%(key)-10s = %(value).2f' % {
     'value': value, 'key': key}  # Swapped
 
 assert old_way == new_way == reordered
-
+print(old_way , new_way , reordered)
 
 # Example 10
 name = 'Max'
@@ -133,7 +133,7 @@ template = '%(name)s loves food. See %(name)s cook.'
 after = template % {'name': name}  # Dictionary
 
 assert before == after
-
+print(before ,'==', after)
 
 # Example 11
 for i, (item, count) in enumerate(pantry):
@@ -149,6 +149,7 @@ for i, (item, count) in enumerate(pantry):
     }
 
     assert before == after
+    print(before," == ",after)
 #krkrkr
 
 # Example 12
@@ -199,7 +200,7 @@ print('{} replaces {{}}'.format(1.23))
 
 
 # Example 18
-formatted = '{1} = {0}'.format(key, value)
+formatted = '{0} = {1}'.format(key, value)
 print(formatted)
 
 
@@ -251,6 +252,7 @@ new_formatted = new_template.format(
 )
 
 assert old_formatted == new_formatted
+print(old_formatted ,"==", new_formatted)
 
 
 # Example 23
@@ -278,7 +280,9 @@ str_kw   = '{key:<10} = {value:.2f}'.format(key=key, value=value)
 c_dict   = '%(key)-10s = %(value).2f' % {'key': key, 'value': value}
 
 assert c_tuple == c_dict == f_string
+print(c_tuple ,'==', c_dict ,'==', f_string)
 assert str_args == str_kw == f_string
+print(str_args ,'==', str_kw ,'==', f_string)
 
 
 # Example 26
