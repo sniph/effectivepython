@@ -16,6 +16,8 @@
 
 # Reproduce book environment
 import random
+from re import A
+
 random.seed(1234)
 
 import logging
@@ -37,99 +39,124 @@ OLD_CWD = os.getcwd()
 atexit.register(lambda: os.chdir(OLD_CWD))
 os.chdir(TEST_DIR.name)
 
+
 def close_open_files():
     everything = gc.get_objects()
     for obj in everything:
         if isinstance(obj, io.IOBase):
             obj.close()
 
+
 atexit.register(close_open_files)
 
 
 # Example 1
 snack_calories = {
-	'chips': 140,
-	'popcorn': 80,
-	'nuts': 190,
+    "chips": 140,
+    "popcorn": 80,
+    "nuts": 190,
 }
 items = tuple(snack_calories.items())
 print(items)
 
 
 # Example 2
-item = ('Peanut butter', 'Jelly')
+item = ("Peanut butter", "Jelly")
 first = item[0]
 second = item[1]
-print(first, 'and', second)
+print(first, "and", second)
 
 
 # Example 3
 try:
-    pair = ('Chocolate', 'Peanut butter')
-    pair[0] = 'Honey'
+    pair = ("Chocolate", "Peanut butter")
+    pair[0] = "Honey"
+# pair[0] = pair[1]
 except:
-    logging.exception('Expected')
+    logging.exception("Expected")
 else:
     assert False
 
 
 # Example 4
-item = ('Peanut butter', 'Jelly')
+item = ("Peanut butter", "Jelly")
 first, second = item  # Unpacking
-print(first, 'and', second)
+print(first, "and", second)
 
 
 # Example 5
 favorite_snacks = {
-	'salty': ('pretzels', 100),
-	'sweet': ('cookies', 180),
-	'veggie': ('carrots', 20),
+    "salty": ("pretzels", 100),
+    "sweet": ("cookies", 180),
+    "veggie": ("carrots", 20),
 }
 
-((type1, (name1, cals1)),
- (type2, (name2, cals2)),
- (type3, (name3, cals3))) = favorite_snacks.items()
+(
+    (type1, (name1, cals1)),
+    (type2, (name2, cals2)),
+    (type3, (name3, cals3)),
+) = favorite_snacks.items()
 
-print(f'Favorite {type1} is {name1} with {cals1} calories')
-print(f'Favorite {type2} is {name2} with {cals2} calories')
-print(f'Favorite {type3} is {name3} with {cals3} calories')
+print(f"Favorite {type1} is {name1} with {cals1} calories")
+print(f"Favorite {type2} is {name2} with {cals2} calories")
+print(f"Favorite {type3} is {name3} with {cals3} calories")
 
 
 # Example 6
 def bubble_sort(a):
-	for _ in range(len(a)):
-		for i in range(1, len(a)):
-			if a[i] < a[i-1]:
-				temp = a[i]
-				a[i] = a[i-1]
-				a[i-1] = temp
+    for _ in range(len(a)):
+        # repeat for every item in list
+        for i in range(1, len(a)):
+            # move element 1  to right pos in list
+            if a[i] < a[i - 1]:
+                temp = a[i]
+                a[i] = a[i - 1]
+                a[i - 1] = temp
 
-names = ['pretzels', 'carrots', 'arugula', 'bacon']
+
+names = ["pretzels", "carrots", "arugula", "bacon"]
+for _ in range(len(names)):
+    print(_)
+    print(names[_])
+
 bubble_sort(names)
 print(names)
 
 
 # Example 7
 def bubble_sort(a):
-	for _ in range(len(a)):
-		for i in range(1, len(a)):
-			if a[i] < a[i-1]:
-				a[i-1], a[i] = a[i], a[i-1]  # Swap
+    for _ in range(len(a)):
+        for i in range(1, len(a)):
 
-names = ['pretzels', 'carrots', 'arugula', 'bacon']
+            if a[i] < a[i - 1]:
+                a[i - 1], a[i] = a[i], a[i - 1]  # Swap elements
+
+
+a = ["pretzels", "carrots", "arugula", "bacon"]
+for _ in range(len(a)):
+    for i in range(1, len(a)):
+
+        if a[i] < a[i - 1]:
+            a[i - 1], a[i] = a[i], a[i - 1]
+print(a)
+
+
+names = ["pretzels", "carrots", "arugula", "bacon"]
 bubble_sort(names)
 print(names)
 
 
 # Example 8
-snacks = [('bacon', 350), ('donut', 240), ('muffin', 190)]
+snacks = [("bacon", 350), ("donut", 240), ("muffin", 190)]
 for i in range(len(snacks)):
-	item = snacks[i]
-	name = item[0]
-	calories = item[1]
-	print(f'#{i+1}: {name} has {calories} calories')
+    item = snacks[i]
+    name = item[0]
+    calories = item[1]
+    # have to create index i+1 i starts with 0
+    print(f"#{i+1}: {name} has {calories} calories")
 
 
 # Example 9
 for rank, (name, calories) in enumerate(snacks, 1):
-	print(f'#{rank}: {name} has {calories} calories')
+    # unpacking and index in one line
+    print(f"#{rank}: {name} has {calories} calories")
