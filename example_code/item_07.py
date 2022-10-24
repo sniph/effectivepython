@@ -16,6 +16,7 @@
 
 # Reproduce book environment
 import random
+
 random.seed(1234)
 
 import logging
@@ -37,11 +38,13 @@ OLD_CWD = os.getcwd()
 atexit.register(lambda: os.chdir(OLD_CWD))
 os.chdir(TEST_DIR.name)
 
+
 def close_open_files():
     everything = gc.get_objects()
     for obj in everything:
         if isinstance(obj, io.IOBase):
             obj.close()
+
 
 atexit.register(close_open_files)
 
@@ -52,34 +55,46 @@ from random import randint
 random_bits = 0
 for i in range(32):
     if randint(0, 1):
+        # 1<< 1 means 0010 following zeros
+        # 1101 | 0010 => 1111 add bits
+        # xxxx | 0010 = xx1x (All the other bits remain the same)
         random_bits |= 1 << i
 
 print(bin(random_bits))
 
 
 # Example 2
-flavor_list = ['vanilla', 'chocolate', 'pecan', 'strawberry']
+flavor_list = ["vanilla", "chocolate", "pecan", "strawberry"]
 for flavor in flavor_list:
-    print(f'{flavor} is delicious')
+    # iterate over list
+    print(f"{flavor} is delicious")
 
 
 # Example 3
 for i in range(len(flavor_list)):
+    # i is 0,1,2
     flavor = flavor_list[i]
-    print(f'{i + 1}: {flavor}')
+    # index 0 + 1 etc.
+    print(f"{i + 1}: {flavor}")
 
 
 # Example 4
 it = enumerate(flavor_list)
+# iterate first (0, 'vanilla')
 print(next(it))
+# iterate second (1, 'chocolate')
 print(next(it))
 
 
 # Example 5
 for i, flavor in enumerate(flavor_list):
-    print(f'{i + 1}: {flavor}')
+    # i is 0,1,2
+    # index 0+1 etc.
+    print(f"{i + 1}: {flavor}")
 
 
 # Example 6
 for i, flavor in enumerate(flavor_list, 1):
-    print(f'{i}: {flavor}')
+    # i is 0,1,2
+    # index starting from 1 in enumerate
+    print(f"{i}: {flavor}")
