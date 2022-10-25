@@ -16,6 +16,7 @@
 
 # Reproduce book environment
 import random
+
 random.seed(1234)
 
 import logging
@@ -37,39 +38,51 @@ OLD_CWD = os.getcwd()
 atexit.register(lambda: os.chdir(OLD_CWD))
 os.chdir(TEST_DIR.name)
 
+
 def close_open_files():
     everything = gc.get_objects()
     for obj in everything:
         if isinstance(obj, io.IOBase):
             obj.close()
 
+
 atexit.register(close_open_files)
 
 
 # Example 1
+# dict fresh_fruit
 fresh_fruit = {
-    'apple': 10,
-    'banana': 8,
-    'lemon': 5,
+    "apple": 10,
+    "banana": 8,
+    "lemon": 5,
 }
+print(fresh_fruit)
 
 
 # Example 2
 def make_lemonade(count):
-    print(f'Making {count} lemons into lemonade')
+    # get the value from the dict from key
+    # => is int part of str:int
+    # with get method
+    print(f"Making {count} lemons into lemonade")
+
 
 def out_of_stock():
-    print('Out of stock!')
+    print("Out of stock!")
 
-count = fresh_fruit.get('lemon', 0)
-if count:
+
+count = fresh_fruit.get("lemon", 0)
+print(count)
+if count:  # if count exitst are ther lemons?
+    # 0 evaluates to false
     make_lemonade(count)
 else:
     out_of_stock()
 
 
 # Example 3
-if count := fresh_fruit.get('lemon', 0):
+# if count true  then count gets value by assign with ":="
+if count := fresh_fruit.get("lemon", 0):
     make_lemonade(count)
 else:
     out_of_stock()
@@ -77,9 +90,11 @@ else:
 
 # Example 4
 def make_cider(count):
-    print(f'Making cider with {count} apples')
+    print(f"Making cider with {count} apples")
 
-count = fresh_fruit.get('apple', 0)
+
+count = fresh_fruit.get("apple", 0)
+print(count)
 if count >= 4:
     make_cider(count)
 else:
@@ -87,7 +102,8 @@ else:
 
 
 # Example 5
-if (count := fresh_fruit.get('apple', 0)) >= 4:
+# short version with direct assign to count variable
+if (count := fresh_fruit.get("apple", 0)) >= 4:
     make_cider(count)
 else:
     out_of_stock()
@@ -95,28 +111,34 @@ else:
 
 # Example 6
 def slice_bananas(count):
-    print(f'Slicing {count} bananas')
+    print(f"Slicing {count} bananas")
     return count * 4
+
 
 class OutOfBananas(Exception):
     pass
 
+
 def make_smoothies(count):
-    print(f'Making a smoothies with {count} banana slices')
+    print(f"Making a smoothies with {count} banana slices")
+
 
 pieces = 0
-count = fresh_fruit.get('banana', 0)
+count = fresh_fruit.get("banana", 0)
+
 if count >= 2:
     pieces = slice_bananas(count)
 
 try:
     smoothies = make_smoothies(pieces)
+# except not triggered by count in any way why create a class?
 except OutOfBananas:
     out_of_stock()
 
 
 # Example 7
-count = fresh_fruit.get('banana', 0)
+# count = fresh_fruit.get("banana", 0)
+count = 0  # doens't trigger the exception?
 if count >= 2:
     pieces = slice_bananas(count)
 else:
@@ -130,7 +152,8 @@ except OutOfBananas:
 
 # Example 8
 pieces = 0
-if (count := fresh_fruit.get('banana', 0)) >= 2:
+# direct assign values to count and test
+if (count := fresh_fruit.get("banana", 0)) >= 2:
     pieces = slice_bananas(count)
 
 try:
@@ -140,7 +163,9 @@ except OutOfBananas:
 
 
 # Example 9
-if (count := fresh_fruit.get('banana', 0)) >= 2:
+# no initial values for pieces only if is true and
+# else pieces = 0 (even if there is 1 banana)
+if (count := fresh_fruit.get("banana", 0)) >= 2:
     pieces = slice_bananas(count)
 else:
     pieces = 0
@@ -152,73 +177,97 @@ except OutOfBananas:
 
 
 # Example 10
-count = fresh_fruit.get('banana', 0)
+# test in steps if/else if true then stop
+count = fresh_fruit.get("banana", 0)
 if count >= 2:
     pieces = slice_bananas(count)
     to_enjoy = make_smoothies(pieces)
 else:
-    count = fresh_fruit.get('apple', 0)
+    count = fresh_fruit.get("apple", 0)
     if count >= 4:
         to_enjoy = make_cider(count)
     else:
-        count = fresh_fruit.get('lemon', 0)
+        count = fresh_fruit.get("lemon", 0)
         if count:
             to_enjoy = make_lemonade(count)
         else:
-            to_enjoy = 'Nothing'
+            to_enjoy = "Nothing"
+print(to_enjoy)
 
 
 # Example 11
-if (count := fresh_fruit.get('banana', 0)) >= 2:
+# if true then run functions otherwise elif
+if (count := fresh_fruit.get("banana", 0)) >= 2:
     pieces = slice_bananas(count)
     to_enjoy = make_smoothies(pieces)
-elif (count := fresh_fruit.get('apple', 0)) >= 4:
+elif (count := fresh_fruit.get("apple", 0)) >= 4:
     to_enjoy = make_cider(count)
-elif count := fresh_fruit.get('lemon', 0):
+elif count := fresh_fruit.get("lemon", 0):
     to_enjoy = make_lemonade(count)
 else:
-    to_enjoy = 'Nothing'
+    to_enjoy = "Nothing"
 
 
 # Example 12
+#several dicts in a list
 FRUIT_TO_PICK = [
-    {'apple': 1, 'banana': 3},
-    {'lemon': 2, 'lime': 5},
-    {'orange': 3, 'melon': 2},
+    {"apple": 1, "banana": 3},
+    {"lemon": 2, "lime": 5},
+    {"orange": 3, "melon": 2},
 ]
+print(FRUIT_TO_PICK)
 
 def pick_fruit():
     if FRUIT_TO_PICK:
         return FRUIT_TO_PICK.pop(0)
     else:
         return []
+print(FRUIT_TO_PICK)
+
 
 def make_juice(fruit, count):
     return [(fruit, count)]
 
+#print(make_juice(fruit ,count = fresh_fruit))
+
 bottles = []
+#every call of fresh_fruit gives a new dict {'apple': 1, 'banana': 3} etc.
+#due to pop(0) over list
 fresh_fruit = pick_fruit()
-while fresh_fruit:
-    for fruit, count in fresh_fruit.items():
+print(fresh_fruit)
+while fresh_fruit: #as long as the list is not []
+    for fruit, count in fresh_fruit.items(): #take key,value from list
         batch = make_juice(fruit, count)
         bottles.extend(batch)
-    fresh_fruit = pick_fruit()
+    fresh_fruit = pick_fruit() #functional code repeat till
+    #fresh_fruit = [] by pop(0) atribute
 
 print(bottles)
-
+   """_summary_
+for fruit, count in fresh_fruit.items(): #take key,value from list
+        batch = make_juice(fruit, count)
+        print('batch',batch)
+        bottles.extend(batch)
+        print('bottles',bottles)
+fresh_fruit = pick_fruit() 
+ 
+    """
 
 # Example 13
 FRUIT_TO_PICK = [
-    {'apple': 1, 'banana': 3},
-    {'lemon': 2, 'lime': 5},
-    {'orange': 3, 'melon': 2},
+    {"apple": 1, "banana": 3},
+    {"lemon": 2, "lime": 5},
+    {"orange": 3, "melon": 2},
 ]
+print(FRUIT_TO_PICK)
 
 bottles = []
-while True:                     # Loop
-    fresh_fruit = pick_fruit()
-    if not fresh_fruit:         # And a half
+while True:  # Loop without end
+    fresh_fruit = pick_fruit() #first set from list by pop(0)
+    if not fresh_fruit:  # And a half => if fresh_fruit = [] 
+        #because not false/[] gives True then break the loop
         break
+    #as long as fresh_fruit is True not empty
     for fruit, count in fresh_fruit.items():
         batch = make_juice(fruit, count)
         bottles.extend(batch)
@@ -227,16 +276,19 @@ print(bottles)
 
 
 # Example 14
-FRUIT_TO_PICK = [
-    {'apple': 1, 'banana': 3},
-    {'lemon': 2, 'lime': 5},
-    {'orange': 3, 'melon': 2},
-]
+    FRUIT_TO_PICK = [
+        {"apple": 1, "banana": 3},
+        {"lemon": 2, "lime": 5},
+        {"orange": 3, "melon": 2},
+    ]
+    print(FRUIT_TO_PICK)
 
-bottles = []
-while fresh_fruit := pick_fruit():
-    for fruit, count in fresh_fruit.items():
-        batch = make_juice(fruit, count)
-        bottles.extend(batch)
+    bottles = []
+    #as long fresh_fruit is not [] assign set with pop(0) 
+    while fresh_fruit := pick_fruit():
+        for fruit, count in fresh_fruit.items():
+            batch = make_juice(fruit, count)
+            bottles.extend(batch)
+        print(fresh_fruit)
 
-print(bottles)
+    print(bottles)
