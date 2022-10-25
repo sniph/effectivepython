@@ -16,6 +16,7 @@
 
 # Reproduce book environment
 import random
+
 random.seed(1234)
 
 import logging
@@ -37,43 +38,52 @@ OLD_CWD = os.getcwd()
 atexit.register(lambda: os.chdir(OLD_CWD))
 os.chdir(TEST_DIR.name)
 
+
 def close_open_files():
     everything = gc.get_objects()
     for obj in everything:
         if isinstance(obj, io.IOBase):
             obj.close()
 
+
 atexit.register(close_open_files)
 
 
 # Example 1
+# range(3) => items 0,1,2 zo 3 elements
 for i in range(3):
-    print('Loop', i)
+    print("Loop", i)
+# stops with else block
 else:
-    print('Else block!')
+    print("Else block!")
 
 
 # Example 2
 for i in range(3):
-    print('Loop', i)
+    print("Loop", i)
+    # stops the for loop at i =1
+    # then break out of loop no else block
     if i == 1:
         break
 else:
-    print('Else block!')
+    print("Else block!")
 
 
 # Example 3
 for x in []:
-    print('Never runs')
+    print("Never runs")
+# only else bock for doesn't iterate over empty list
 else:
-    print('For Else block!')
+    print("For Else block!")
 
 
 # Example 4
 while False:
-    print('Never runs')
+    print("Never runs")
+# first while block doesn't run else
+# block does
 else:
-    print('While Else block!')
+    print("While Else block!")
 
 
 # Example 5
@@ -81,33 +91,44 @@ a = 4
 b = 9
 
 for i in range(2, min(a, b) + 1):
-    print('Testing', i)
+    # range is 2,3,4
+    print("Testing", i)
+    # test both number on divison by i
+    # close with else block
     if a % i == 0 and b % i == 0:
-        print('Not coprime')
+        print("Not coprime")
         break
 else:
-    print('Coprime')
+    print("Coprime")
 
 
 # Example 6
 def coprime(a, b):
+    # test divison of a,b by i mod 0 with helper function
     for i in range(2, min(a, b) + 1):
         if a % i == 0 and b % i == 0:
             return False
     return True
 
+
 assert coprime(4, 9)
 assert not coprime(3, 6)
-
+print(coprime(4, 9))
+print(coprime(3, 6))
 
 # Example 7
 def coprime_alternate(a, b):
     is_coprime = True
+    # initial True check for for false check in function
+    # else initial still true
     for i in range(2, min(a, b) + 1):
         if a % i == 0 and b % i == 0:
             is_coprime = False
             break
     return is_coprime
 
+
 assert coprime_alternate(4, 9)
 assert not coprime_alternate(3, 6)
+print(coprime_alternate(4, 9))
+print(coprime_alternate(3, 6))
