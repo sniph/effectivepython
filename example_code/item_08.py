@@ -16,6 +16,7 @@
 
 # Reproduce book environment
 import random
+
 random.seed(1234)
 
 import logging
@@ -37,17 +38,20 @@ OLD_CWD = os.getcwd()
 atexit.register(lambda: os.chdir(OLD_CWD))
 os.chdir(TEST_DIR.name)
 
+
 def close_open_files():
     everything = gc.get_objects()
     for obj in everything:
         if isinstance(obj, io.IOBase):
             obj.close()
 
+
 atexit.register(close_open_files)
 
 
 # Example 1
-names = ['Cecilia', 'Lise', 'Marie']
+names = ["Cecilia", "Lise", "Marie"]
+# list comprhension with lengt of names
 counts = [len(n) for n in names]
 print(counts)
 
@@ -57,7 +61,10 @@ longest_name = None
 max_count = 0
 
 for i in range(len(names)):
+    # range 0,1,2 => 3 names
+    # count with indiv. length of names
     count = counts[i]
+    # compare indiv.length of names with max
     if count > max_count:
         longest_name = names[i]
         max_count = count
@@ -68,26 +75,35 @@ print(longest_name)
 # Example 3
 longest_name = None
 max_count = 0
+# enumerate has inex and name has default
+# don't have to use length
 for i, name in enumerate(names):
+    # get the lengths of the names
     count = counts[i]
     if count > max_count:
         longest_name = name
         max_count = count
-assert longest_name == 'Cecilia'
+assert longest_name == "Cecilia"
+print(longest_name)
 
 
 # Example 4
+
 longest_name = None
 max_count = 0
+# unpack the zip over names,counts to name,count
+# combine lengh,name in one command zip
 for name, count in zip(names, counts):
     if count > max_count:
         longest_name = name
         max_count = count
-assert longest_name == 'Cecilia'
+assert longest_name == "Cecilia"
+print(longest_name)
 
 
 # Example 5
-names.append('Rosalind')
+names.append("Rosalind")
+# cobine two lists to one list as long as the shortest list
 for name, count in zip(names, counts):
     print(name)
 
@@ -95,5 +111,7 @@ for name, count in zip(names, counts):
 # Example 6
 import itertools
 
+# to combine lists to longest list use itertools zip_longest
 for name, count in itertools.zip_longest(names, counts):
-    print(f'{name}: {count}')
+    print(f"{name}: {count}")
+    print(name, count)
