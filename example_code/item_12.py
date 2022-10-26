@@ -16,6 +16,7 @@
 
 # Reproduce book environment
 import random
+
 random.seed(1234)
 
 import logging
@@ -37,63 +38,71 @@ OLD_CWD = os.getcwd()
 atexit.register(lambda: os.chdir(OLD_CWD))
 os.chdir(TEST_DIR.name)
 
+
 def close_open_files():
     everything = gc.get_objects()
     for obj in everything:
         if isinstance(obj, io.IOBase):
             obj.close()
 
+
 atexit.register(close_open_files)
 
 
 # Example 1
-x = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
-odds = x[::2]
-evens = x[1::2]
+x = ["red", "orange", "yellow", "green", "blue", "purple"]
+
+odds = x[::2]  # alternating values 0,2,4
+evens = x[1::2]  # alternating values 1,3,5
 print(odds)
 print(evens)
 
 
 # Example 2
-x = b'mongoose'
-y = x[::-1]
+x = b"mongoose"
+print(x[::1])
+y = x[::-1]  # reverse values
 print(y)
 
 
 # Example 3
-x = '寿司'
-y = x[::-1]
+x = "寿司"
+y = x[::-1]  # reverse values
 print(y)
 
 
 # Example 4
 try:
-    w = '寿司'
-    x = w.encode('utf-8')
+    w = "寿司"
+    x = w.encode("utf-8")
+    print(x)
     y = x[::-1]
-    z = y.decode('utf-8')
+    print(y)
+    z = y.decode("utf-8")
+    print(z)
 except:
-    logging.exception('Expected')
+    logging.exception("Expected")
 else:
     assert False
 
 
 # Example 5
-x = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-x[::2]   # ['a', 'c', 'e', 'g']
-x[::-2]  # ['h', 'f', 'd', 'b']
+x = ["a", "b", "c", "d", "e", "f", "g", "h"]
+x[::2]  # ['a', 'c', 'e', 'g'] alternating step 2 starts from beginning
+x[::-2]  # ['h', 'f', 'd', 'b'] alternating step -2 starts at the end of the
 
 
 # Example 6
-x[2::2]     # ['c', 'e', 'g']
-x[-2::-2]   # ['g', 'e', 'c', 'a']
-x[-2:2:-2]  # ['g', 'e']
-x[2:2:-2]   # []
+x[2::2]  # ['c', 'e', 'g'] #start pos 3 alternating step 2
+x[-2::-2]  # ['g', 'e', 'c', 'a'] #start pos 2 from end alternating -2
+x[-2:2:-2]  # ['g', 'e'] # pos 2 from end till pos 3 alternating -2
+x[2:2:-2]  # [] # start pos 3 end pos 3 altenating -2
 
 
 # Example 7
-y = x[::2]   # ['a', 'c', 'e', 'g']
-z = y[1:-1]  # ['c', 'e']
+# x = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+y = x[::2]  # ['a', 'c', 'e', 'g'] #start pos 0 all items alternating 2
+z = y[1:-1]  # ['c', 'e'] # start pos 2 till forlast item from prev list y
 print(x)
 print(y)
 print(z)
