@@ -15,14 +15,28 @@
 # limitations under the License.
 
 
-
 # Example 7
 # Python 3.5
+# class gives strings in the normal
 class MyClass:
     def __init__(self):
-        self.alligator = 'hatchling'
-        self.elephant = 'calf'
+        self.alligator = "hatchling"
+        self.elephant = "calf"
+
+
+# initiation oof class
+a = MyClass()
+# loop over with dict
+for key, value in a.__dict__.items():
+    print("%s = %s" % (key, value))
+
+# python 3.10 way
+class MyClass:
+    def __init__(self):
+        self.alligator = "hatchling"
+        self.elephant = "calf"
+
 
 a = MyClass()
 for key, value in a.__dict__.items():
-    print('%s = %s' % (key, value))
+    print(f"{key} = {value}")

@@ -15,14 +15,17 @@
 # limitations under the License.
 
 
-
 # Example 3
 # Python 3.5
 baby_names = {
-    'cat': 'kitten',
-    'dog': 'puppy',
+    "cat": "kitten",
+    "dog": "puppy",
 }
+# print key in a list with "list  .key"
 print(list(baby_names.keys()))
+# print values in a list with "list  .values"
 print(list(baby_names.values()))
+# print list of tuples with "list and tuple (key,value)
 print(list(baby_names.items()))
+# now the last goes out first
 print(baby_names.popitem())  # Randomly chooses an item

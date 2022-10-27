@@ -15,11 +15,11 @@
 # limitations under the License.
 
 
-
 # Example 1
 # Python 3.5
+# print the following as set
 baby_names = {
-    'cat': 'kitten',
-    'dog': 'puppy',
+    "cat": "kitten",
+    "dog": "puppy",
 }
 print(baby_names)

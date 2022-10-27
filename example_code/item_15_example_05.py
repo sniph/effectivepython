@@ -15,11 +15,20 @@
 # limitations under the License.
 
 
-
 # Example 5
 # Python 3.5
+# this now is ordered along with the function call
 def my_func(**kwargs):
     for key, value in kwargs.items():
-        print('%s = %s' % (key, value))
+        print("%s = %s" % (key, value))
 
-my_func(goose='gosling', kangaroo='joey')
+
+my_func(goose="gosling", kangaroo="joey")
+
+# python 3.10 way
+def my_func(**kwargs):
+    for key, value in kwargs.items():
+        print(f"{key} = {value}")
+
+
+my_func(goose="gosling", kangaroo="joey")

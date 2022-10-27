@@ -14,24 +14,71 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+votes = {
+    "otter": 1281,
+    "polar bear": 587,
+    "fox": 863,
+}
 
+print(votes)
+print(votes.items())
+print(votes.values())
+
+# names = list(votes.keys())
+names = list(votes)
+print(names)
+names.sort(key=votes.get, reverse=True)
+print(names)
+
+
+def populate_ranks(votes, ranks):
+    # only key are seleted and sorted
+    names = list(votes.keys())
+    # sort names on values(reverse) of the keys(names)
+    names.sort(key=votes.get, reverse=True)
+    for i, name in enumerate(names, 1):
+        ranks[name] = i
+
+
+print(populate_ranks())
+
+
+def get_winner(ranks):
+    # return next(iter(ranks))
+    return iter(ranks)
+
+
+ranks = {}
+populate_ranks(votes, ranks)
+print(ranks)
+next(iter(ranks))
+next(iter(ranks))
+winner = get_winner(ranks)
+# with next in the function it gives the first item eve
+# rytime
+print(winner)
+# with next outside function you'll get the next rank
+print(next(winner))
 
 # Example 17
 # Check types in this file with: python -m mypy <path>
 
 from typing import Dict, MutableMapping
 
-def populate_ranks(votes: Dict[str, int],
-                   ranks: Dict[str, int]) -> None:
+
+def populate_ranks(votes: Dict[str, int], ranks: Dict[str, int]) -> None:
     names = list(votes.keys())
     names.sort(key=votes.get, reverse=True)
     for i, name in enumerate(names, 1):
         ranks[name] = i
 
+
 def get_winner(ranks: Dict[str, int]) -> str:
     return next(iter(ranks))
 
+
 from typing import Iterator, MutableMapping
+
 
 class SortedDict(MutableMapping[str, int]):
     def __init__(self) -> None:
@@ -55,10 +102,11 @@ class SortedDict(MutableMapping[str, int]):
     def __len__(self) -> int:
         return len(self.data)
 
+
 votes = {
-    'otter': 1281,
-    'polar bear': 587,
-    'fox': 863,
+    "otter": 1281,
+    "polar bear": 587,
+    "fox": 863,
 }
 
 sorted_ranks = SortedDict()
