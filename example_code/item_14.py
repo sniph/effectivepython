@@ -16,6 +16,7 @@
 
 # Reproduce book environment
 import random
+
 random.seed(1234)
 
 import logging
@@ -37,18 +38,23 @@ OLD_CWD = os.getcwd()
 atexit.register(lambda: os.chdir(OLD_CWD))
 os.chdir(TEST_DIR.name)
 
+
 def close_open_files():
     everything = gc.get_objects()
     for obj in everything:
         if isinstance(obj, io.IOBase):
             obj.close()
 
+
 atexit.register(close_open_files)
 
 
 # Example 1
 numbers = [93, 86, 11, 68, 70]
+a = sorted(numbers)
+print(a)
 numbers.sort()
+
 print(numbers)
 
 
@@ -58,99 +64,113 @@ class Tool:
         self.name = name
         self.weight = weight
 
+    ## \!r gives repr representation of the object
     def __repr__(self):
-        return f'Tool({self.name!r}, {self.weight})'
+        return f"Tool({self.name!r}, {self.weight})"
+
 
 tools = [
-    Tool('level', 3.5),
-    Tool('hammer', 1.25),
-    Tool('screwdriver', 0.5),
-    Tool('chisel', 0.25),
+    Tool("level", 3.5),
+    Tool("hammer", 1.25),
+    Tool("screwdriver", 0.5),
+    Tool("chisel", 0.25),
 ]
+print(tools)
 
+print(Tool("level", 3.5))
 
 # Example 3
 try:
     tools.sort()
 except:
-    logging.exception('Expected')
+    logging.exception("Expected")
 else:
     assert False
 
 
 # Example 4
-print('Unsorted:', repr(tools))
-tools.sort(key=lambda x: x.name)
-print('\nSorted:  ', tools)
+print("Unsorted:", repr(tools))
+print(repr(tools.sort(key=lambda x: x.name)))
+print("\nSorted:  ", tools)
 
 
 # Example 5
 tools.sort(key=lambda x: x.weight)
-print('By weight:', tools)
+print("By weight:", tools)
 
 
 # Example 6
-places = ['home', 'work', 'New York', 'Paris']
+places = ["home", "work", "New York", "Paris"]
 places.sort()
-print('Case sensitive:  ', places)
+print("Case sensitive:  ", places)
 places.sort(key=lambda x: x.lower())
-print('Case insensitive:', places)
+print("Case insensitive:", places)
 
 
 # Example 7
 power_tools = [
-    Tool('drill', 4),
-    Tool('circular saw', 5),
-    Tool('jackhammer', 40),
-    Tool('sander', 4),
+    Tool("drill", 4),
+    Tool("circular saw", 5),
+    Tool("jackhammer", 40),
+    Tool("sander", 4),
 ]
 
 
 # Example 8
-saw = (5, 'circular saw')
-jackhammer = (40, 'jackhammer')
+# assert seems to check keys for evaluation
+# if key same order then values order important
+saw = (5, "circular saw")
+jackhammer = (5, "jackhammer")
 assert not (jackhammer < saw)  # Matches expectations
-
+assert jackhammer > saw  # Matches expectations
 
 # Example 9
-drill = (4, 'drill')
-sander = (4, 'sander')
+drill = (4, "drill")
+sander = (4, "sander")
 assert drill[0] == sander[0]  # Same weight
-assert drill[1] < sander[1]   # Alphabetically less
-assert drill < sander         # Thus, drill comes first
+assert drill[1] < sander[1]  # Alphabetically less
+assert drill < sander  # Thus, drill comes first
 
 
 # Example 10
+# sort first on weight then on name
 power_tools.sort(key=lambda x: (x.weight, x.name))
 print(power_tools)
 
 
 # Example 11
-power_tools.sort(key=lambda x: (x.weight, x.name),
-                 reverse=True)  # Makes all criteria descending
+# sort first on weight then on name now reverse
+power_tools.sort(
+    key=lambda x: (x.weight, x.name), reverse=True
+)  # Makes all criteria descending
 print(power_tools)
 
 
 # Example 12
+# first reverse sort on weight exept then normal sort on name
 power_tools.sort(key=lambda x: (-x.weight, x.name))
 print(power_tools)
 
 
 # Example 13
+# cannot use "-" with sort key and reverse option true
+
 try:
-    power_tools.sort(key=lambda x: (x.weight, -x.name),
-                     reverse=True)
+    power_tools.sort(key=lambda x: (x.weight, -x.name), reverse=True)
+    # print(power_tools)
 except:
-    logging.exception('Expected')
+    logging.exception("Expected")
 else:
     assert False
 
 
 # Example 14
-power_tools.sort(key=lambda x: x.name)   # Name ascending
-
-power_tools.sort(key=lambda x: x.weight, # Weight descending
-                 reverse=True)
+# prevent is theunary option else use 2 sort after each other
+# firts sort name
+power_tools.sort(key=lambda x: x.name)  # Name ascending
+print(power_tools)
+# then sort wiight
+power_tools.sort(key=lambda x: x.weight, reverse=True)  # Weight descending
 
 print(power_tools)
 
@@ -161,6 +181,5 @@ print(power_tools)
 
 
 # Example 16
-power_tools.sort(key=lambda x: x.weight,
-                 reverse=True)
+power_tools.sort(key=lambda x: x.weight, reverse=True)
 print(power_tools)
