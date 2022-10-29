@@ -113,7 +113,31 @@ def get_first_int(values, key, default=0):
         return int(found[0])
     return default
 
-
 # Example 8
 green = get_first_int(my_values, "green")
 print(f"Green:   {green!r}")
+
+pictures = {}
+path = 'profile_9991.png'
+
+with open(path, 'wb') as f:
+    f.write(b'image data here 9991')
+#test path in picture then assign path from picture set to handle
+if path in pictures:
+    handle = pictures[path]
+#if not in pictures set then assign open path to handle
+else:
+    try:
+        handle = open(path, 'a+b')
+    except OSError:
+        print(f'Failed to open path {path}')
+        raise
+    #assign new handle to pictures set
+    else:
+        pictures[path] = handle
+
+handle.seek(0)
+image_data = handle.read()
+
+print(pictures)
+print(image_data)

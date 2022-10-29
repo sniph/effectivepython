@@ -16,6 +16,7 @@
 
 # Reproduce book environment
 import random
+
 random.seed(1234)
 
 import logging
@@ -37,32 +38,38 @@ OLD_CWD = os.getcwd()
 atexit.register(lambda: os.chdir(OLD_CWD))
 os.chdir(TEST_DIR.name)
 
+
 def close_open_files():
     everything = gc.get_objects()
     for obj in everything:
         if isinstance(obj, io.IOBase):
             obj.close()
 
+
 atexit.register(close_open_files)
 
 
 # Example 1
 pictures = {}
-path = 'profile_1234.png'
+path = "profile_1234.png"
 
-with open(path, 'wb') as f:
-    f.write(b'image data here 1234')
-
+with open(path, "wb") as f:
+    f.write(b"image data here 1234")
+# assign if key if not get genertes default "None"
 if (handle := pictures.get(path)) is None:
+    # if "None" then try loop
     try:
-        handle = open(path, 'a+b')
+        handle = open(path, "a+b")
     except OSError:
-        print(f'Failed to open path {path}')
+        print(f"Failed to open path {path}")
         raise
     else:
         pictures[path] = handle
-
+print(handle)
+# set pointer to begin of set/file
 handle.seek(0)
+print(handle.seek(0))
+# read the data from the handle into var image_data
 image_data = handle.read()
 
 print(pictures)
@@ -72,22 +79,24 @@ print(image_data)
 # Example 2
 # Examples using in and KeyError
 pictures = {}
-path = 'profile_9991.png'
+path = "profile_9991.png"
 
-with open(path, 'wb') as f:
-    f.write(b'image data here 9991')
-
+with open(path, "wb") as f:
+    f.write(b"image data here 9991")
+# test path in picture then assign path from picture set to handle
 if path in pictures:
     handle = pictures[path]
+# if not in pictures set then assign open path to handle
 else:
     try:
-        handle = open(path, 'a+b')
+        handle = open(path, "a+b")
     except OSError:
-        print(f'Failed to open path {path}')
+        print(f"Failed to open path {path}")
         raise
+    # assign new handle to pictures set
     else:
         pictures[path] = handle
-
+# set pointer to begin of handle(file/set/data)
 handle.seek(0)
 image_data = handle.read()
 
@@ -95,23 +104,28 @@ print(pictures)
 print(image_data)
 
 pictures = {}
-path = 'profile_9922.png'
+path = "profile_9922.png"
 
-with open(path, 'wb') as f:
-    f.write(b'image data here 9991')
-
+with open(path, "wb") as f:
+    f.write(b"image data here 9991")
+# try on keyerror if key(path) is missing
+# if exists assign key(path) to handle
 try:
     handle = pictures[path]
+# if key missing assign new  key(path) to handle
 except KeyError:
     try:
-        handle = open(path, 'a+b')
+        handle = open(path, "a+b")
     except OSError:
-        print(f'Failed to open path {path}')
+        print(f"Failed to open path {path}")
         raise
+    # and assign handle to set in pictures
     else:
         pictures[path] = handle
 
+# point to begin of handle
 handle.seek(0)
+# read value where handle is referencing to
 image_data = handle.read()
 
 print(pictures)
@@ -120,16 +134,18 @@ print(image_data)
 
 # Example 3
 pictures = {}
-path = 'profile_9239.png'
+path = "profile_9239.png"
 
-with open(path, 'wb') as f:
-    f.write(b'image data here 9239')
-
+with open(path, "wb") as f:
+    f.write(b"image data here 9239")
+# assign pictures(path) to handle if not in set pictures assign default path
 try:
-    handle = pictures.setdefault(path, open(path, 'a+b'))
+    handle = pictures.setdefault(path, open(path, "a+b"))
 except OSError:
-    print(f'Failed to open path {path}')
+    print(f"Failed to open path {path}")
     raise
+# point to begin of handle
+# assign handle refering data to image_data
 else:
     handle.seek(0)
     image_data = handle.read()
@@ -140,42 +156,48 @@ print(image_data)
 
 # Example 4
 try:
-    path = 'profile_4555.csv'
-    
-    with open(path, 'wb') as f:
-        f.write(b'image data here 9239')
-    
+    path = "profile_4555.csv"
+
+    with open(path, "wb") as f:
+        f.write(b"image data here 9239")
+
     from collections import defaultdict
-    
+
     def open_picture(profile_path):
         try:
-            return open(profile_path, 'a+b')
+            return open(profile_path, "a+b")
         except OSError:
-            print(f'Failed to open path {profile_path}')
+            print(f"Failed to open path {profile_path}")
             raise
-    
+
+    # assign path to pictures set with defaultdict collection
     pictures = defaultdict(open_picture)
+    # assign path to handle
     handle = pictures[path]
+    # point at begin of referenced data
     handle.seek(0)
+    # assign data to image_data
     image_data = handle.read()
 except:
-    logging.exception('Expected')
+    logging.exception("Expected")
 else:
     assert False
 
 
 # Example 5
-path = 'account_9090.csv'
+path = "account_9090.csv"
 
-with open(path, 'wb') as f:
-    f.write(b'image data here 9090')
+with open(path, "wb") as f:
+    f.write(b"image data here 9090")
+
 
 def open_picture(profile_path):
     try:
-        return open(profile_path, 'a+b')
+        return open(profile_path, "a+b")
     except OSError:
-        print(f'Failed to open path {profile_path}')
+        print(f"Failed to open path {profile_path}")
         raise
+
 
 class Pictures(dict):
     def __missing__(self, key):
@@ -183,9 +205,14 @@ class Pictures(dict):
         self[key] = value
         return value
 
+
+# use the __missing__ function in class Pictures to assign new path
 pictures = Pictures()
+# assign path to handle
 handle = pictures[path]
+# point to begin of referenced data
 handle.seek(0)
+# assing data to image_data
 image_data = handle.read()
 print(pictures)
 print(image_data)
