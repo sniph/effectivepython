@@ -16,6 +16,7 @@
 
 # Reproduce book environment
 import random
+
 random.seed(1234)
 
 import logging
@@ -37,11 +38,13 @@ OLD_CWD = os.getcwd()
 atexit.register(lambda: os.chdir(OLD_CWD))
 os.chdir(TEST_DIR.name)
 
+
 def close_open_files():
     everything = gc.get_objects()
     for obj in everything:
         if isinstance(obj, io.IOBase):
             obj.close()
+
 
 atexit.register(close_open_files)
 
@@ -52,37 +55,50 @@ def get_stats(numbers):
     maximum = max(numbers)
     return minimum, maximum
 
+
 lengths = [63, 73, 72, 60, 67, 66, 71, 61, 72, 70]
 
+# assign/unpack the return values max.min from function
+# to variables
 minimum, maximum = get_stats(lengths)  # Two return values
 
-print(f'Min: {minimum}, Max: {maximum}')
+print(f"Min: {minimum}, Max: {maximum}")
 
 
 # Example 2
+# assign to values to two variables
 first, second = 1, 2
 assert first == 1
 assert second == 2
 
+
 def my_function():
     return 1, 2
 
+
+# assign two values to 2 variables through function
 first, second = my_function()
 assert first == 1
 assert second == 2
 
 
 # Example 3
+# lengths = [63, 73, 72, 60, 67, 66, 71, 61, 72, 70]
+# function accept list return list by list comprehension
 def get_avg_ratio(numbers):
     average = sum(numbers) / len(numbers)
+    # x divided by average to determine ratio
     scaled = [x / average for x in numbers]
+    # sort smal to big
     scaled.sort(reverse=True)
     return scaled
 
+
+# divide/unpack list in 3 pieces 2 var and middle list
 longest, *middle, shortest = get_avg_ratio(lengths)
 
-print(f'Longest:  {longest:>4.0%}')
-print(f'Shortest: {shortest:>4.0%}')
+print(f"Longest:  {longest:>4.0%}")
+print(f"Shortest: {shortest:>4.0%}")
 
 
 # Example 4
@@ -93,20 +109,28 @@ def get_stats(numbers):
     average = sum(numbers) / count
 
     sorted_numbers = sorted(numbers)
+    # floor division by 2  3.5 => 3 etc.
     middle = count // 2
+    # define middle in even len list
+    # mod count divided by 2 true then middle
     if count % 2 == 0:
+        # len is 8 lower pos 4 => 0,1,2,3
         lower = sorted_numbers[middle - 1]
+        # len is 8/2 = 4 pos 5 => 0,1,2,3,4
         upper = sorted_numbers[middle]
         median = (lower + upper) / 2
     else:
+        # middle is oneven say 7//2 = 3(floor 3.5) pos 4 0,1,2,3
         median = sorted_numbers[middle]
 
     return minimum, maximum, average, median, count
 
+
+# assign 5 variables from function is positional
 minimum, maximum, average, median, count = get_stats(lengths)
 
-print(f'Min: {minimum}, Max: {maximum}')
-print(f'Average: {average}, Median: {median}, Count {count}')
+print(f"Min: {minimum}, Max: {maximum}")
+print(f"Average: {average}, Median: {median}, Count {count}")
 
 assert minimum == 60
 assert maximum == 73
@@ -115,6 +139,8 @@ assert median == 68.5
 assert count == 10
 
 # Verify odd count median
+# variables are positional dummyvariables by "_"
+# _, _, _, median, count = get_stats([1, 2, 3])
 _, _, _, median, count = get_stats([1, 2, 3])
 assert median == 2
 assert count == 3
@@ -122,21 +148,23 @@ assert count == 3
 
 # Example 5
 # Correct:
+# positional names function local scop
 minimum, maximum, average, median, count = get_stats(lengths)
+print(f"Min: {minimum}, Max: {maximum}")
+print(f"Average: {average}, Median: {median}, Count {count}")
 
 # Oops! Median and average swapped:
 minimum, maximum, median, average, count = get_stats(lengths)
+print(f"Min: {minimum}, Max: {maximum}")
+print(f"Average: {average}, Median: {median}, Count {count}")
 
 
 # Example 6
-minimum, maximum, average, median, count = get_stats(
-    lengths)
+# advise never unpack more than 3 items
+minimum, maximum, average, median, count = get_stats(lengths)
 
-minimum, maximum, average, median, count = \
-    get_stats(lengths)
+minimum, maximum, average, median, count = get_stats(lengths)
 
-(minimum, maximum, average,
- median, count) = get_stats(lengths)
+(minimum, maximum, average, median, count) = get_stats(lengths)
 
-(minimum, maximum, average, median, count
-    ) = get_stats(lengths)
+(minimum, maximum, average, median, count) = get_stats(lengths)
