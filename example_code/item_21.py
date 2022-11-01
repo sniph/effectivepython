@@ -16,6 +16,7 @@
 
 # Reproduce book environment
 import random
+
 random.seed(1234)
 
 import logging
@@ -37,25 +38,43 @@ OLD_CWD = os.getcwd()
 atexit.register(lambda: os.chdir(OLD_CWD))
 os.chdir(TEST_DIR.name)
 
+
 def close_open_files():
     everything = gc.get_objects()
     for obj in everything:
         if isinstance(obj, io.IOBase):
             obj.close()
 
+
 atexit.register(close_open_files)
 
 
 # Example 1
 def sort_priority(values, group):
+
+    # "x" new defined in local function helper
+    # "group" in outer function defined
     def helper(x):
         if x in group:
             return (0, x)
         return (1, x)
+
+    # values defined in function, sorting according to tuples
+    # see docstring
     values.sort(key=helper)
+    # print(values.sort(key=helper))
+    """#    _summary_docstring
+    #see how the helper function classifies the lsit of numbers    
+    [helper(x) for x in numbers]
+    [(0, 2), (0, 3), (0, 5), (0, 7), (1, 1), (1, 4), (1, 6), (1, 8)]
+
+        """
 
 
 # Example 2
+#
+# use sort_priority function to arrange numbers in list
+# sort on tuples in group or not 0 or 1
 numbers = [8, 3, 1, 2, 5, 4, 7, 6]
 group = {2, 3, 5, 7}
 sort_priority(numbers, group)
@@ -63,67 +82,89 @@ print(numbers)
 
 
 # Example 3
+# found flag has to return if numbers in group are found
+# scope of "found" is local to most inner function
+# inner fuction is local for outer function so those variables apply
 def sort_priority2(numbers, group):
     found = False
+
     def helper(x):
         if x in group:
             found = True  # Seems simple
             return (0, x)
         return (1, x)
+
     numbers.sort(key=helper)
+    # always False helper function doesn't appy to outer function
     return found
 
 
 # Example 4
+# test on found with found flag in outer function
 numbers = [8, 3, 1, 2, 5, 4, 7, 6]
 found = sort_priority2(numbers, group)
-print('Found:', found)
+print("Found:", found)
 print(numbers)
 
 
 # Example 5
+# variable not defined when try to assign to other variable
 try:
     foo = does_not_exist * 5
 except:
-    logging.exception('Expected')
+    logging.exception("Expected")
 else:
     assert False
 
 
 # Example 6
+# scope is in different functions the inner cannot change outer scope
 def sort_priority2(numbers, group):
-    found = False         # Scope: 'sort_priority2'
+    found = False  # Scope: 'sort_priority2'
+
     def helper(x):
         if x in group:
             found = True  # Scope: 'helper' -- Bad!
             return (0, x)
         return (1, x)
+
     numbers.sort(key=helper)
     return found
 
 
 # Example 7
+
+
 def sort_priority3(numbers, group):
     found = False
+    # nonlocal will bring inner scop to nearest outer scope
+    # so here the nonlocal inner scope "found" can change the outer scope "found"
     def helper(x):
         nonlocal found  # Added
         if x in group:
             found = True
             return (0, x)
         return (1, x)
+
     numbers.sort(key=helper)
     return found
 
 
 # Example 8
+# test inner/outer scope with nonlocal variables
+# found is now flag for numbers in group as "True"
 numbers = [8, 3, 1, 2, 5, 4, 7, 6]
 found = sort_priority3(numbers, group)
 assert found
+print(found)
 assert numbers == [2, 3, 5, 7, 1, 4, 6, 8]
 
 
 # Example 9
 numbers = [8, 3, 1, 2, 5, 4, 7, 6]
+group = {2, 3, 5, 7}
+
+
 class Sorter:
     def __init__(self, group):
         self.group = group
@@ -135,6 +176,10 @@ class Sorter:
             return (0, x)
         return (1, x)
 
+
+# initialize Sorter class with helper function(__call__)
+# seems to get "found" in same scope as init function in the class
+# nonlocal function can get out of the closure of the function(scope)
 sorter = Sorter(group)
 numbers.sort(key=sorter)
 assert sorter.found is True
