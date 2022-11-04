@@ -16,6 +16,7 @@
 
 # Reproduce book environment
 import random
+
 random.seed(1234)
 
 import logging
@@ -37,28 +38,37 @@ OLD_CWD = os.getcwd()
 atexit.register(lambda: os.chdir(OLD_CWD))
 os.chdir(TEST_DIR.name)
 
+
 def close_open_files():
     everything = gc.get_objects()
     for obj in everything:
         if isinstance(obj, io.IOBase):
             obj.close()
 
+
 atexit.register(close_open_files)
 
 
 # Example 1
+# seems to return the same datetime at separate
+# calls of function
 from time import sleep
 from datetime import datetime
 
-def log(message, when=datetime.now()):
-    print(f'{when}: {message}')
 
-log('Hi there!')
+def log(message, when=datetime.now()):
+    print(f"{when}: {message}")
+
+
+log("Hi there!")
 sleep(0.1)
-log('Hello again!')
+log("Hello again!")
 
 
 # Example 2
+# by assigning  "None" as default keyword argument
+# test on "None" then assign datetime again gives
+# different results
 def log(message, when=None):
     """Log a message with a timestamp.
 
@@ -69,18 +79,21 @@ def log(message, when=None):
     """
     if when is None:
         when = datetime.now()
-    print(f'{when}: {message}')
+    print(f"{when}: {message}")
 
 
 # Example 3
-log('Hi there!')
+# run the function twice assign datetime twice
+log("Hi there!")
 sleep(0.1)
-log('Hello again!')
+log("Hello again!")
 
 
 # Example 4
 import json
 
+# default variables doesn't have to be called only data
+# one set created and used in both calls
 def decode(data, default={}):
     try:
         return json.loads(data)
@@ -89,19 +102,24 @@ def decode(data, default={}):
 
 
 # Example 5
-foo = decode('bad data')
-foo['stuff'] = 5
-bar = decode('also bad')
-bar['meep'] = 1
-print('Foo:', foo)
-print('Bar:', bar)
+# 2 calls of function same set returns with added value data
+foo = decode("bad data")
+foo["stuff"] = 5
+bar = decode("also bad")
+bar["meep"] = 1
+print("Foo:", foo)
+print("Bar:", bar)
 
 
 # Example 6
+# 2 calls same return for separate variables
 assert foo is bar
+print(foo is bar)
 
 
 # Example 7
+# assign "None" as default and return result try block with test
+# every call to function gives a new set
 def decode(data, default=None):
     """Load JSON data from a string.
 
@@ -119,10 +137,11 @@ def decode(data, default=None):
 
 
 # Example 8
-foo = decode('bad data')
-foo['stuff'] = 5
-bar = decode('also bad')
-bar['meep'] = 1
-print('Foo:', foo)
-print('Bar:', bar)
+# 2 variables with the data from seperate calls
+foo = decode("bad data")
+foo["stuff"] = 5
+bar = decode("also bad")
+bar["meep"] = 1
+print("Foo:", foo)
+print("Bar:", bar)
 assert foo is not bar
