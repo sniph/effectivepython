@@ -15,7 +15,6 @@
 # limitations under the License.
 
 
-
 # Example 9
 # Check types in this file with: python -m mypy <path>
 
@@ -23,8 +22,9 @@ from datetime import datetime
 from time import sleep
 from typing import Optional
 
-def log_typed(message: str,
-              when: Optional[datetime]=None) -> None:
+# work with type hinting shows optional type for variable
+# "when" default to "None" but optional datetime
+def log_typed(message: str, when: Optional[datetime] = None) -> None:
     """Log a message with a timestamp.
 
     Args:
@@ -34,8 +34,9 @@ def log_typed(message: str,
     """
     if when is None:
         when = datetime.now()
-    print(f'{when}: {message}')
+    print(f"{when}: {message}")
 
-log_typed('Hi there!')
+
+log_typed("Hi there!")
 sleep(0.1)
-log_typed('Hello again!')
+log_typed("Hello again!")
