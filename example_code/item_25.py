@@ -16,6 +16,7 @@
 
 # Reproduce book environment
 import random
+
 random.seed(1234)
 
 import logging
@@ -37,19 +38,20 @@ OLD_CWD = os.getcwd()
 atexit.register(lambda: os.chdir(OLD_CWD))
 os.chdir(TEST_DIR.name)
 
+
 def close_open_files():
     everything = gc.get_objects()
     for obj in everything:
         if isinstance(obj, io.IOBase):
             obj.close()
 
+
 atexit.register(close_open_files)
 
 
 # Example 1
-def safe_division(number, divisor,
-                  ignore_overflow,
-                  ignore_zero_division):
+# function with try block for overflow and ZeroDivisionError
+def safe_division(number, divisor, ignore_overflow, ignore_zero_division):
     try:
         return number / divisor
     except OverflowError:
@@ -59,25 +61,28 @@ def safe_division(number, divisor,
             raise
     except ZeroDivisionError:
         if ignore_zero_division:
-            return float('inf')
+            return float("inf")
         else:
             raise
 
 
 # Example 2
+# assign 4 values for call of function
 result = safe_division(1.0, 10**500, True, False)
 print(result)
 
 
 # Example 3
+# set exepct false/true if needed
 result = safe_division(1.0, 0, False, True)
 print(result)
 
 
 # Example 4
-def safe_division_b(number, divisor,
-                    ignore_overflow=False,        # Changed
-                    ignore_zero_division=False):  # Changed
+# default keyword arguments set to false in executio set to True
+def safe_division_b(
+    number, divisor, ignore_overflow=False, ignore_zero_division=False  # Changed
+):  # Changed
     try:
         return number / divisor
     except OverflowError:
@@ -87,27 +92,31 @@ def safe_division_b(number, divisor,
             raise
     except ZeroDivisionError:
         if ignore_zero_division:
-            return float('inf')
+            return float("inf")
         else:
             raise
 
 
 # Example 5
+# sets 1 keyword argument to True other is still default
 result = safe_division_b(1.0, 10**500, ignore_overflow=True)
 print(result)
 
+# sets 1 keyword argument to True other is still default
 result = safe_division_b(1.0, 0, ignore_zero_division=True)
 print(result)
 
 
 # Example 6
+# even positinal ovverride of defaults in function
 assert safe_division_b(1.0, 10**500, True, False) == 0
-
+print(safe_division_b(1.0, 10**500, True, False))
 
 # Example 7
-def safe_division_c(number, divisor, *,  # Changed
-                    ignore_overflow=False,
-                    ignore_zero_division=False):
+# use of "*" after arguments, raises error if keyword arguments are given as postional
+def safe_division_c(
+    number, divisor, *, ignore_overflow=False, ignore_zero_division=False  # Changed
+):
     try:
         return number / divisor
     except OverflowError:
@@ -117,42 +126,58 @@ def safe_division_c(number, divisor, *,  # Changed
             raise
     except ZeroDivisionError:
         if ignore_zero_division:
-            return float('inf')
+            return float("inf")
         else:
             raise
 
 
 # Example 8
+# this raise error 4 postional argument given only 2 arguments in function
+# "*" and 2 keyword arguments
 try:
     safe_division_c(1.0, 10**500, True, False)
 except:
-    logging.exception('Expected')
+    logging.exception("Expected")
 else:
     assert False
 
 
 # Example 9
+# use 2 positional arguments and a keyword argument with assigned value
 result = safe_division_c(1.0, 0, ignore_zero_division=True)
-assert result == float('inf')
+
+assert result == float("inf")
+
 
 try:
     result = safe_division_c(1.0, 0)
+
 except ZeroDivisionError:
-    pass  # Expected
+    print("expected:", result)
+
+    # pass  # Expected
 else:
     assert False
+print(ignore_zero_division)
+print(result)
 
 
 # Example 10
+# make use of changed arguments named or positional keyword arguments are defaulted
 assert safe_division_c(number=2, divisor=5) == 0.4
 assert safe_division_c(divisor=5, number=2) == 0.4
 assert safe_division_c(2, divisor=5) == 0.4
 
 
 # Example 11
-def safe_division_c(numerator, denominator, *,  # Changed
-                    ignore_overflow=False,
-                    ignore_zero_division=False):
+# problem with argument naming call differnt from function call naming
+def safe_division_c(
+    numerator,
+    denominator,
+    *,  # Changed
+    ignore_overflow=False,
+    ignore_zero_division=False,
+):
     try:
         return numerator / denominator
     except OverflowError:
@@ -162,24 +187,31 @@ def safe_division_c(numerator, denominator, *,  # Changed
             raise
     except ZeroDivisionError:
         if ignore_zero_division:
-            return float('inf')
+            return float("inf")
         else:
             raise
 
 
 # Example 12
+# call with different arguments than the default
 try:
     safe_division_c(number=2, divisor=5)
 except:
-    logging.exception('Expected')
+    logging.exception("Expected")
 else:
     assert False
 
 
 # Example 13
-def safe_division_d(numerator, denominator, /, *,  # Changed
-                    ignore_overflow=False,
-                    ignore_zero_division=False):
+# "/" follows positional arguments only
+def safe_division_d(
+    numerator,
+    denominator,
+    /,
+    *,  # Changed
+    ignore_overflow=False,
+    ignore_zero_division=False,
+):
     try:
         return numerator / denominator
     except OverflowError:
@@ -189,32 +221,41 @@ def safe_division_d(numerator, denominator, /, *,  # Changed
             raise
     except ZeroDivisionError:
         if ignore_zero_division:
-            return float('inf')
+            return float("inf")
         else:
             raise
 
 
 # Example 14
+# call function with positional arguments works
 assert safe_division_d(2, 5) == 0.4
+print(safe_division_d(2, 5))
 
 
 # Example 15
+# call with keyword arguments gives error
 try:
     safe_division_d(numerator=2, denominator=5)
 except:
-    logging.exception('Expected')
+    logging.exception("Expected")
 else:
     assert False
 
 
 # Example 16
-def safe_division_e(numerator, denominator, /,
-                    ndigits=10, *,                # Changed
-                    ignore_overflow=False,
-                    ignore_zero_division=False):
+def safe_division_e(
+    numerator,
+    denominator,
+    /,  # follows positional arguments only after * keyword only
+    # in between positional or keyword arguments
+    ndigits=10,  # use argumet name with default value
+    *,  # Changed start of keyword arguments
+    ignore_overflow=False,
+    ignore_zero_division=False,
+):
     try:
-        fraction = numerator / denominator        # Changed
-        return round(fraction, ndigits)           # Changed
+        fraction = numerator / denominator  # Changed
+        return round(fraction, ndigits)  # Changed
     except OverflowError:
         if ignore_overflow:
             return 0
@@ -222,17 +263,24 @@ def safe_division_e(numerator, denominator, /,
             raise
     except ZeroDivisionError:
         if ignore_zero_division:
-            return float('inf')
+            return float("inf")
         else:
             raise
 
 
 # Example 17
+# only 2 positional mandatory arguments
 result = safe_division_e(22, 7)
 print(result)
 
+# third positional argument optional has default
 result = safe_division_e(22, 7, 5)
 print(result)
 
+# third positional argument optional has default also named assigned
 result = safe_division_e(22, 7, ndigits=2)
+print(result)
+
+# keyword argument optional has defaults can be changed too
+result = safe_division_e(22, 7, ndigits=2, ignore_overflow=True)
 print(result)
