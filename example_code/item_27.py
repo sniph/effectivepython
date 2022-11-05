@@ -16,6 +16,7 @@
 
 # Reproduce book environment
 import random
+
 random.seed(1234)
 
 import logging
@@ -37,16 +38,19 @@ OLD_CWD = os.getcwd()
 atexit.register(lambda: os.chdir(OLD_CWD))
 os.chdir(TEST_DIR.name)
 
+
 def close_open_files():
     everything = gc.get_objects()
     for obj in everything:
         if isinstance(obj, io.IOBase):
             obj.close()
 
+
 atexit.register(close_open_files)
 
 
 # Example 1
+# classic way to add numbers to new list from list with processing
 a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 squares = []
 for x in a:
@@ -60,21 +64,31 @@ print(squares)
 
 
 # Example 3
-alt = map(lambda x: x ** 2, a)
-assert list(alt) == squares, f'{alt} {squares}'
+alt = map(lambda x: x**2, a)
+assert list(alt) == squares, f"{alt} {squares}"
 
 
 # Example 4
-even_squares = [x**2 for x in a if x % 2 == 0]
+# list comprehension the code inside the list
+even_squares = [x**2 for x in a if x % 2 == 0]  # us eopf squared and mod 2
 print(even_squares)
 
 
 # Example 5
+a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 alt = map(lambda x: x**2, filter(lambda x: x % 2 == 0, a))
 assert even_squares == list(alt)
+# need of list to generate the squares as comprhension gives object id
+alt2 = list(map(lambda x: x**2, filter(lambda x: x % 2 == 0, a)))
+print(alt2)
+# gives object id in list format
+alt3 = [map(lambda x: x**2, filter(lambda x: x % 2 == 0, a))]
+print(alt3)
 
 
 # Example 6
+# create dict for every number key/value pair number: squared
+# as set comprehension
 even_squares_dict = {x: x**2 for x in a if x % 2 == 0}
 threes_cubed_set = {x**3 for x in a if x % 3 == 0}
 print(even_squares_dict)
@@ -82,9 +96,11 @@ print(threes_cubed_set)
 
 
 # Example 7
-alt_dict = dict(map(lambda x: (x, x**2),
-				filter(lambda x: x % 2 == 0, a)))
-alt_set = set(map(lambda x: x**3,
-	          filter(lambda x: x % 3 == 0, a)))
+# generate dictionary with dict function key/value pairs number: square
+alt_dict = dict(map(lambda x: (x, x**2), filter(lambda x: x % 2 == 0, a)))
+print(alt_dict)
+# generate set with set function number cubed as in list a mod 3 =>3 6 9 not sorted
+alt_set = set(map(lambda x: x**3, filter(lambda x: x % 3 == 0, a)))
+print(alt_set)
 assert even_squares_dict == alt_dict
 assert threes_cubed_set == alt_set
