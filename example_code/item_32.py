@@ -16,6 +16,7 @@
 
 # Reproduce book environment
 import random
+
 random.seed(1234)
 
 import logging
@@ -37,11 +38,13 @@ OLD_CWD = os.getcwd()
 atexit.register(lambda: os.chdir(OLD_CWD))
 os.chdir(TEST_DIR.name)
 
+
 def close_open_files():
     everything = gc.get_objects()
     for obj in everything:
         if isinstance(obj, io.IOBase):
             obj.close()
+
 
 atexit.register(close_open_files)
 
@@ -49,28 +52,40 @@ atexit.register(close_open_files)
 # Example 1
 import random
 
-with open('my_file.txt', 'w') as f:
+# 10 times create lines with random numbers(0-100) times 'a'
+# C:\Users\HarrySnippe\AppData\Local\Temp\2\tmpqsgv3sqc =>see TESTDIR
+# tmpqsgv3sqc start script
+with open("my_file.txt", "w") as f:
     for _ in range(10):
-        f.write('a' * random.randint(0, 100))
-        f.write('\n')
+        f.write("a" * random.randint(0, 100))
+        f.write("\n")
 
-value = [len(x) for x in open('my_file.txt')]
+# use list comprehension to calculate length of lines in file
+value = [len(x) for x in open("my_file.txt")]
 print(value)
 
 
 # Example 2
-it = (len(x) for x in open('my_file.txt'))
+# "it" varaible as generator object
+it = (len(x) for x in open("my_file.txt"))
 print(it)
 
 
 # Example 3
+# "next " method process all the data from file ones the
+# Traceback (most recent call last):
+# File "<stdin>", line 1, in <module>
+# StopIteration
 print(next(it))
 print(next(it))
 
 
 # Example 4
+# generator object roots created in tuple form
 roots = ((x, x**0.5) for x in it)
-
+print(roots)
 
 # Example 5
+# next will generate till end file even if generator object is "root" instead of "it"
+# or the file as to be generated again to get all values for processing with next calls
 print(next(roots))
