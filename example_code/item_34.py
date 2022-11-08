@@ -16,6 +16,7 @@
 
 # Reproduce book environment
 import random
+
 random.seed(1234)
 
 import logging
@@ -37,11 +38,13 @@ OLD_CWD = os.getcwd()
 atexit.register(lambda: os.chdir(OLD_CWD))
 os.chdir(TEST_DIR.name)
 
+
 def close_open_files():
     everything = gc.get_objects()
     for obj in everything:
         if isinstance(obj, io.IOBase):
             obj.close()
+
 
 atexit.register(close_open_files)
 
@@ -49,6 +52,7 @@ atexit.register(close_open_files)
 # Example 1
 import math
 
+# divide 2pi*r in steps and accumulate to full
 def wave(amplitude, steps):
     step_size = 2 * math.pi / steps
     for step in range(steps):
@@ -59,30 +63,41 @@ def wave(amplitude, steps):
 
 
 # Example 2
+
+
 def transmit(output):
     if output is None:
-        print(f'Output is None')
+        print(f"Output is None")
     else:
-        print(f'Output: {output:>5.1f}')
+        print(f"Output: {output:>5.1f}")
+
 
 def run(it):
     for output in it:
         transmit(output)
 
+
+# "run" function as decorator function for "wave" function
+# "transmit" function takes "wave" items to print
 run(wave(3.0, 8))
 
 
 # Example 3
+# first call next(1) assign 1 to "output" variable
 def my_generator():
     received = yield 1
-    print(f'received = {received}')
+    print(f"received = {received}")
+
 
 it = my_generator()
-output = next(it)       # Get first generator output
-print(f'output = {output}')
+output = next(it)  # Get first generator output
+print(f"output = {output}")
 
+# run above code first then below twice
+# second call to next(it) assign None to "received" variable
+# third "assert false"
 try:
-    next(it)            # Run generator until it exits
+    next(it)  # Run generator until it exits
 except StopIteration:
     pass
 else:
@@ -92,20 +107,27 @@ else:
 # Example 4
 it = my_generator()
 output = it.send(None)  # Get first generator output
-print(f'output = {output}')
+print(f"output = {output}")
+# call of "list" method on it generator returns with send method "None" for "received" variable
+# b =list(it)
+# print(b)
 
+# call of it generator with "send" method returns "hello" for "received" variable
 try:
-    it.send('hello!')   # Send value into the generator
+    it.send("hello!")  # Send value into the generator
 except StopIteration:
     pass
 else:
     assert False
 
+a = list(it)
+print(a)
+
 
 # Example 5
 def wave_modulating(steps):
     step_size = 2 * math.pi / steps
-    amplitude = yield             # Receive initial amplitude
+    amplitude = yield  # Receive initial amplitude yield takes over value amplitude left to right
     for step in range(steps):
         radians = step * step_size
         fraction = math.sin(radians)
@@ -114,30 +136,43 @@ def wave_modulating(steps):
 
 
 # Example 6
+# if amplitudes then to "output" variable  assigned with yield output
+# to "amplitude" variable
 def run_modulating(it):
-    amplitudes = [
-        None, 7, 7, 7, 2, 2, 2, 2, 10, 10, 10, 10, 10]
+    amplitudes = [None, 7, 7, 7, 2, 2, 2, 2, 10, 10, 10, 10, 10]
     for amplitude in amplitudes:
         output = it.send(amplitude)
         transmit(output)
 
+
+# "run_modulating" as decorator for "wave_modulating" function
 run_modulating(wave_modulating(12))
 
 
 # Example 7
+# direct approch with "yield from" with differnt amplitudes
 def complex_wave():
     yield from wave(7.0, 3)
     yield from wave(2.0, 4)
     yield from wave(10.0, 5)
 
+
+def run(it):
+    for output in it:
+        transmit(output)
+
+
 run(complex_wave())
 
 
 # Example 8
+# try the "yiled from" approch on combine yield/send method
+# start every time with outpuy: None
 def complex_wave_modulating():
     yield from wave_modulating(3)
     yield from wave_modulating(4)
     yield from wave_modulating(5)
+
 
 run_modulating(complex_wave_modulating())
 
@@ -161,11 +196,13 @@ def complex_wave_cascading(amplitude_it):
 
 
 # Example 11
+# take the loop over "next" method approch, make generator from "it" variable by iter method on "amplitudes" list
 def run_cascading():
     amplitudes = [7, 7, 7, 2, 2, 2, 2, 10, 10, 10, 10, 10]
     it = complex_wave_cascading(iter(amplitudes))
     for amplitude in amplitudes:
         output = next(it)
         transmit(output)
+
 
 run_cascading()
