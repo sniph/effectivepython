@@ -88,4 +88,12 @@ print(roots)
 # Example 5
 # next will generate till end file even if generator object is "root" instead of "it"
 # or the file as to be generated again to get all values for processing with next calls
+# A Python generator is:
+"""
+    a Python function or method
+    which acts as an iterator
+    which keeps track of when it's called (stateful)
+    and returns data to its caller using the yield keyword
+"""
+
 print(next(roots))
