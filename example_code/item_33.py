@@ -16,6 +16,7 @@
 
 # Reproduce book environment
 import random
+
 random.seed(1234)
 
 import logging
@@ -37,19 +38,23 @@ OLD_CWD = os.getcwd()
 atexit.register(lambda: os.chdir(OLD_CWD))
 os.chdir(TEST_DIR.name)
 
+
 def close_open_files():
     everything = gc.get_objects()
     for obj in everything:
         if isinstance(obj, io.IOBase):
             obj.close()
 
+
 atexit.register(close_open_files)
 
 
 # Example 1
+# yield returns an item per call
 def move(period, speed):
     for _ in range(period):
         yield speed
+
 
 def pause(delay):
     for _ in range(delay):
@@ -57,6 +62,7 @@ def pause(delay):
 
 
 # Example 2
+# yield the different functions
 def animate():
     for delta in move(4, 5.0):
         yield delta
@@ -66,52 +72,66 @@ def animate():
         yield delta
 
 
+# will execute 4 times with next over animate function
+print(next(animate()))
+# call "animate" function with "list" method assign to "a" list
+a = list(animate())
+print(a)
+
 # Example 3
 def render(delta):
-    print(f'Delta: {delta:.1f}')
+    print(f"Delta: {delta:.1f}")
     # Move the images onscreen
 
+
+# run as a decorator for animate function
 def run(func):
     for delta in func():
         render(delta)
+
 
 run(animate)
 
 
 # Example 4
+# "yield from" statement is same as "yield" but place in function differnt
+# yield makes a generator function
 def animate_composed():
     yield from move(4, 5.0)
     yield from pause(3)
     yield from move(2, 3.0)
 
+
+# "run" function as decorator for animate_composed to process deltas
 run(animate_composed)
 
 
 # Example 5
 import timeit
 
+
 def child():
     for i in range(1_000_000):
         yield i
 
+
+# loop over loop with yield
 def slow():
     for i in child():
         yield i
 
+
+# get one loop over yield more direct
 def fast():
     yield from child()
 
-baseline = timeit.timeit(
-    stmt='for _ in slow(): pass',
-    globals=globals(),
-    number=50)
-print(f'Manual nesting {baseline:.2f}s')
 
-comparison = timeit.timeit(
-    stmt='for _ in fast(): pass',
-    globals=globals(),
-    number=50)
-print(f'Composed nesting {comparison:.2f}s')
+# test yield methods yield in for loop against "yield from" direct function
+baseline = timeit.timeit(stmt="for _ in slow(): pass", globals=globals(), number=50)
+print(f"Manual nesting {baseline:.2f}s")
+
+comparison = timeit.timeit(stmt="for _ in fast(): pass", globals=globals(), number=50)
+print(f"Composed nesting {comparison:.2f}s")
 
 reduction = -(comparison - baseline) / baseline
-print(f'{reduction:.1%} less time')
+print(f"{reduction:.1%} less time")
