@@ -16,6 +16,7 @@
 
 # Reproduce book environment
 import random
+
 random.seed(1234)
 
 import logging
@@ -37,58 +38,67 @@ OLD_CWD = os.getcwd()
 atexit.register(lambda: os.chdir(OLD_CWD))
 os.chdir(TEST_DIR.name)
 
+
 def close_open_files():
     everything = gc.get_objects()
     for obj in everything:
         if isinstance(obj, io.IOBase):
             obj.close()
 
+
 atexit.register(close_open_files)
 
 
 # Example 1
+# create generator "it" call with next method yield values till .throw exception raised
 try:
+
     class MyError(Exception):
         pass
-    
+
     def my_generator():
         yield 1
         yield 2
         yield 3
-    
+
     it = my_generator()
     print(next(it))  # Yield 1
     print(next(it))  # Yield 2
-    print(it.throw(MyError('test error')))
+    print(it.throw(MyError("test error")))
 except:
-    logging.exception('Expected')
+    logging.exception("Expected")
 else:
     assert False
 
 
 # Example 2
+# first call with next value 1, second call with next value 2 in try block
+# third call with next value after yield output value 4 throw error(receive and send part in call for throws exception)
 def my_generator():
     yield 1
 
     try:
         yield 2
     except MyError:
-        print('Got MyError!')
+        print("Got MyError!")
     else:
         yield 3
 
     yield 4
 
+
 it = my_generator()
 print(next(it))  # Yield 1
 print(next(it))  # Yield 2
-print(it.throw(MyError('test error')))
+print(it.throw(MyError("test error")))
 
 
 # Example 3
 class Reset(Exception):
     pass
 
+
+# "timer" generator function counts back to zero
 def timer(period):
     current = period
     while current:
@@ -99,30 +109,61 @@ def timer(period):
             current = period
 
 
-# Example 4
-RESETS = [
-    False, False, False, True, False, True, False,
-    False, False, False, False, False, False, False]
+print(list(timer(3)))
 
+# Example 4
+class Reset(Exception):
+    pass
+
+
+RESETS = [
+    False,  # value 3 => 0,1,2,3 timer(4)
+    False,  # value 2 => 0,1,2,3
+    False,  # value 1 => 0,1,2,3
+    True,  # reset to original state value timer 4
+    False,
+    True,
+    False,
+    False,
+    False,
+    False,
+    False,
+    False,
+    False,
+    False,
+]
+
+# if True ok else will deliver False trigger exception pop values from left to right in Reset list
 def check_for_reset():
     # Poll for external event
     return RESETS.pop(0)
 
+
+# after every item in Reset list announce remaining values timer cycles
 def announce(remaining):
-    print(f'{remaining} ticks remaining')
+    print(f"{remaining} ticks remaining")
+
 
 def run():
-    it = timer(4)    
+    it = timer(4)  # 0,1,2,3 =>4 times
+    # while runs loop till exception is raised triggered by RESETS list
     while True:
         try:
+            # throw error if RESETS list has True value
             if check_for_reset():
-                current = it.throw(Reset())
+                current = it.throw(
+                    Reset()
+                )  # call class method as pass and except in timer reset current = period original position
+
             else:
                 current = next(it)
+        # if no timer cycles StopIteration exception is raised and break out of loop
         except StopIteration:
             break
+        # after every cycle else part of try block returns announce print remaining cycles
         else:
             announce(current)
+
 
 run()
 
@@ -144,14 +185,31 @@ class Timer:
 
 # Example 6
 RESETS = [
-    False, False, True, False, True, False,
-    False, False, False, False, False, False, False]
+    False,
+    False,
+    True,
+    False,
+    True,
+    False,
+    False,
+    False,
+    False,
+    False,
+    False,
+    False,
+    False,
+]
+
 
 def run():
+    # initialize Timer class =>"timer " variable with 4 cycles
     timer = Timer(4)
+    # loop over timer check RESETS list if True rest, announce per cycle interval
+    # every event as function in class makes it more obvious
     for current in timer:
-        if check_for_reset():
-            timer.reset()
+        if check_for_reset():  # check RESETS list
+            timer.reset()  # reset timer
         announce(current)
+
 
 run()
