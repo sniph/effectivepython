@@ -48,5 +48,6 @@ atexit.register(close_open_files)
 
 # Example 1
 import sys
+
 print(sys.version_info)
 print(sys.version)

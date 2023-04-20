@@ -16,6 +16,7 @@
 
 # Reproduce book environment
 import random
+
 random.seed(1234)
 
 import logging
@@ -37,16 +38,52 @@ OLD_CWD = os.getcwd()
 atexit.register(lambda: os.chdir(OLD_CWD))
 os.chdir(TEST_DIR.name)
 
+
 def close_open_files():
     everything = gc.get_objects()
     for obj in everything:
         if isinstance(obj, io.IOBase):
             obj.close()
 
+
 atexit.register(close_open_files)
 
 
 # Example 1
+# no print out if no return value
+# get al object lose frrom class object and test then repackage
+grades = {}
+
+
+def add_student(name):
+    grades[name] = []
+
+
+def report_grade(name, score):
+    grades[name].append(score)
+
+
+# returns names and average_grade in tuple
+def average_grade(name):
+    grades2 = grades[name]
+    # use grades2 instead grades name conflict
+    return sum(grades2) / len(grades2)
+
+
+print(grades)  # {}
+add_student("Isaac Newton")
+print(grades)  # {'Isaac Newton': []}
+# add scores to name/score dict
+report_grade("Isaac Newton", 90)
+report_grade("Isaac Newton", 95)
+report_grade("Isaac Newton", 85)
+print(grades)  # {'Isaac Newton': [90, 95, 85]}
+
+
+b = average_grade("Isaac Newton")
+print(b)  # 90.0
+
+# then multiple functions and variable assignments packaged as class object
 class SimpleGradebook:
     def __init__(self):
         self._grades = {}
@@ -57,37 +94,42 @@ class SimpleGradebook:
     def report_grade(self, name, score):
         self._grades[name].append(score)
 
+    # returns names and average_grade in tuple 
     def average_grade(self, name):
         grades = self._grades[name]
-        return sum(grades) / len(grades)
+        return name, sum(grades) / len(grades)
 
 
 # Example 2
+# initialize book variable as new class SimpleGradebook
 book = SimpleGradebook()
-book.add_student('Isaac Newton')
-book.report_grade('Isaac Newton', 90)
-book.report_grade('Isaac Newton', 95)
-book.report_grade('Isaac Newton', 85)
+book.add_student("Isaac Newton")
 
-print(book.average_grade('Isaac Newton'))
+
+book.report_grade("Isaac Newton", 90)
+book.report_grade("Isaac Newton", 95)
+book.report_grade("Isaac Newton", 85)
+
+print(book.average_grade("Isaac Newton"))
 
 
 # Example 3
 from collections import defaultdict
 
+
 class BySubjectGradebook:
     def __init__(self):
-        self._grades = {}                       # Outer dict
+        self._grades = {}  # Outer dict
 
     def add_student(self, name):
         self._grades[name] = defaultdict(list)  # Inner dict
 
-
-# Example 4
+    # Example 4
     def report_grade(self, name, subject, grade):
         by_subject = self._grades[name]
         grade_list = by_subject[subject]
         grade_list.append(grade)
+        # return grade_list
 
     def average_grade(self, name):
         by_subject = self._grades[name]
@@ -100,12 +142,53 @@ class BySubjectGradebook:
 
 # Example 5
 book = BySubjectGradebook()
-book.add_student('Albert Einstein')
-book.report_grade('Albert Einstein', 'Math', 75)
-book.report_grade('Albert Einstein', 'Math', 65)
-book.report_grade('Albert Einstein', 'Gym', 90)
-book.report_grade('Albert Einstein', 'Gym', 95)
-print(book.average_grade('Albert Einstein'))
+book.add_student("Albert Einstein")
+book.report_grade("Albert Einstein", "Math", 75)
+book.report_grade("Albert Einstein", "Math", 65)
+book.report_grade("Albert Einstein", "Gym", 90)
+book.report_grade("Albert Einstein", "Gym", 95)
+
+
+print(book.average_grade("Albert Einstein"))
+
+# class BySubjectGradebook:
+# def __init__(self):
+grades = {}  # Outer dict
+
+
+def add_student(name):
+    grades[name] = defaultdict(list)  # Inner dict
+
+
+# Example 4
+def report_grade(name, subject, grade):
+    by_subject = grades[name]
+    grade_list = by_subject[subject]
+    grade_list.append(grade)
+    return name, by_subject, grade_list
+
+
+def average_grade(name):
+    by_subject = grades[name]
+    total, count = 0, 0
+    for grades in by_subject.values():
+        total += sum(grades)
+        count += len(grades)
+    return total / count
+
+#for name setup defaultdict no value then "None" also set per "subject:[list of grades]"
+# book = BySubjectGradebook()
+add_student("Albert Einstein")
+print(grades)
+report_grade("Albert Einstein", "Math", 75)
+# print(report_grade("Albert Einstein", "Math", 75))
+
+report_grade("Albert Einstein", "Math", 65)
+report_grade("Albert Einstein", "Gym", 90)
+report_grade("Albert Einstein", "Gym", 95)
+
+
+print(average_grade("Albert Einstein"))
 
 
 # Example 6
@@ -121,8 +204,7 @@ class WeightedGradebook:
         grade_list = by_subject[subject]
         grade_list.append((score, weight))
 
-
-# Example 7
+    # Example 7
     def average_grade(self, name):
         by_subject = self._grades[name]
 
@@ -141,13 +223,13 @@ class WeightedGradebook:
 
 # Example 8
 book = WeightedGradebook()
-book.add_student('Albert Einstein')
-book.report_grade('Albert Einstein', 'Math', 75, 0.05)
-book.report_grade('Albert Einstein', 'Math', 65, 0.15)
-book.report_grade('Albert Einstein', 'Math', 70, 0.80)
-book.report_grade('Albert Einstein', 'Gym', 100, 0.40)
-book.report_grade('Albert Einstein', 'Gym', 85, 0.60)
-print(book.average_grade('Albert Einstein'))
+book.add_student("Albert Einstein")
+book.report_grade("Albert Einstein", "Math", 75, 0.05)
+book.report_grade("Albert Einstein", "Math", 65, 0.15)
+book.report_grade("Albert Einstein", "Math", 70, 0.80)
+book.report_grade("Albert Einstein", "Gym", 100, 0.40)
+book.report_grade("Albert Einstein", "Gym", 85, 0.60)
+print(book.average_grade("Albert Einstein"))
 
 
 # Example 9
@@ -162,8 +244,8 @@ print(average_grade)
 
 # Example 10
 grades = []
-grades.append((95, 0.45, 'Great job'))
-grades.append((85, 0.55, 'Better next time'))
+grades.append((95, 0.45, "Great job"))
+grades.append((85, 0.55, "Better next time"))
 total = sum(score * weight for score, weight, _ in grades)
 total_weight = sum(weight for _, weight, _ in grades)
 average_grade = total / total_weight
@@ -173,7 +255,7 @@ print(average_grade)
 # Example 11
 from collections import namedtuple
 
-Grade = namedtuple('Grade', ('score', 'weight'))
+Grade = namedtuple("Grade", ("score", "weight"))
 
 
 # Example 12
@@ -219,12 +301,12 @@ class Gradebook:
 
 # Example 15
 book = Gradebook()
-albert = book.get_student('Albert Einstein')
-math = albert.get_subject('Math')
+albert = book.get_student("Albert Einstein")
+math = albert.get_subject("Math")
 math.report_grade(75, 0.05)
 math.report_grade(65, 0.15)
 math.report_grade(70, 0.80)
-gym = albert.get_subject('Gym')
+gym = albert.get_subject("Gym")
 gym.report_grade(100, 0.40)
 gym.report_grade(85, 0.60)
 print(albert.average_grade())

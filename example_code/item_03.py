@@ -89,7 +89,7 @@ print('one' + 'two')
 
 # Example 6
 try:
-    b'one' + 'two'
+    b'one' + 'two' #string cocatenate problrm byte and string
 except:
     logging.exception('Expected')
 else:
@@ -112,7 +112,7 @@ assert 'red' > 'blue'
 
 # Example 9
 try:
-    assert 'red' > b'blue'
+    assert 'red' > b'blue' #compare byte with string problem
 except:
     logging.exception('Expected')
 else:
@@ -121,7 +121,7 @@ else:
 
 # Example 10
 try:
-    assert b'blue' < 'red'
+    assert b'blue' < 'red' #compare byte to string problem
 except:
     logging.exception('Expected')
 else:
@@ -129,7 +129,7 @@ else:
 
 
 # Example 11
-print(b'foo' == 'foo')
+print(b'foo' == 'foo') #compare byte with string error
 
 
 # Example 12
@@ -139,7 +139,7 @@ print('red %s' % 'blue')
 
 # Example 13
 try:
-    print(b'red %s' % 'blue')
+    print(b'red %s' % 'blue') #cannot combine byte wit string
 except:
     logging.exception('Expected')
 else:
@@ -147,12 +147,12 @@ else:
 
 
 # Example 14
-print('red %s' % b'blue')
+print('red %s' % b'blue') #combine string with byte works
 
 
 # Example 15
 try:
-    with open('data.bin', 'w') as f:
+    with open('data.bin', 'w') as f: #'w' expects sring as write value
         f.write(b'\xf1\xf2\xf3\xf4\xf5')
 except:
     logging.exception('Expected')
@@ -161,7 +161,7 @@ else:
 
 
 # Example 16
-with open('data.bin', 'wb') as f:
+with open('data.bin', 'wb') as f: #use wb instead of w for bytes coded
     f.write(b'\xf1\xf2\xf3\xf4\xf5')
 
 
@@ -174,7 +174,7 @@ try:
         kwargs['encoding'] = 'utf-8'
         return real_open(*args, **kwargs)
     
-    with open('data.bin', 'r') as f:
+    with open('data.bin', 'r') as f: #created new function open read only utf-8
         data = f.read()
 except:
     logging.exception('Expected')
@@ -184,7 +184,7 @@ else:
 
 # Example 18
 # Restore the overloaded open above.
-open = real_open
+open = real_open #set default setting open back
 
 with open('data.bin', 'rb') as f:
     data = f.read()
@@ -193,7 +193,10 @@ assert data == b'\xf1\xf2\xf3\xf4\xf5'
 
 
 # Example 19
-with open('data.bin', 'r', encoding='cp1252') as f:
+with open('data.bin', 'r', encoding='cp1252') as f: #can read non-utf 8 also
     data = f.read()
 
 assert data == 'ñòóôõ'
+
+with open('data.bin', 'r') as f: #can read non-utf 8 also
+    data = f.read()
