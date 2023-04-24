@@ -65,13 +65,13 @@ print(bin(random_bits))
 
 # Example 2
 flavor_list = ["vanilla", "chocolate", "pecan", "strawberry"]
-for flavor in flavor_list:
+for flavor in flavor_list: #iterate over list print ,with F" format
     # iterate over list
     print(f"{flavor} is delicious")
 
 
 # Example 3
-for i in range(len(flavor_list)):
+for i in range(len(flavor_list)):#check lengt list,iterate with i over list
     # i is 0,1,2
     flavor = flavor_list[i]
     # index 0 + 1 etc.
@@ -79,7 +79,7 @@ for i in range(len(flavor_list)):
 
 
 # Example 4
-it = enumerate(flavor_list)
+it = enumerate(flavor_list)#iterate stepwise by next method
 # iterate first (0, 'vanilla')
 print(next(it))
 # iterate second (1, 'chocolate')
@@ -87,14 +87,14 @@ print(next(it))
 
 
 # Example 5
-for i, flavor in enumerate(flavor_list):
+for i, flavor in enumerate(flavor_list):#iterate with enumerate no length, auto i indexing
     # i is 0,1,2
     # index 0+1 etc.
     print(f"{i + 1}: {flavor}")
 
 
 # Example 6
-for i, flavor in enumerate(flavor_list, 1):
+for i, flavor in enumerate(flavor_list, 1): #iterate with enumerate and index start is 1
     # i is 0,1,2
     # index starting from 1 in enumerate
     print(f"{i}: {flavor}")

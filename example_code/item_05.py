@@ -52,28 +52,29 @@ atexit.register(close_open_files)
 # Example 1
 from urllib.parse import parse_qs
 
-my_values = parse_qs("red=5&blue=0&green=", keep_blank_values=True)
+my_values = parse_qs("red=5&blue=0&green=", keep_blank_values=True)#returns set of  key/value pair with value between []
+print(my_values)
 print(repr(my_values))
 
 
 # Example 2
-print("Red:     ", my_values.get("red"))
+print("Red:     ", my_values.get("red"))#return value from set by key
 print("Green:   ", my_values.get("green"))
 print("Opacity: ", my_values.get("opacity"))
 
 
 # Example 3
 # For query string 'red=5&blue=0&green='
-red = my_values.get("red", [""])[0] or 0
+red = my_values.get("red", [""])[0] or 0 #take first element with get from dict filter on red or 0 return string or 0
 green = my_values.get("green", [""])[0] or 0
 opacity = my_values.get("opacity", [""])[0] or 0
-print(f"Red:     {red!r}")
+print(f"Red:     {red!r}")#or is used to call repr method on value
 print(f"Green:   {green!r}")
 print(f"Opacity: {opacity!r}")
 
 
 # Example 4
-red = int(my_values.get("red", [""])[0] or 0)
+red = int(my_values.get("red", [""])[0] or 0)#make int from string or 0
 green = int(my_values.get("green", [""])[0] or 0)
 opacity = int(my_values.get("opacity", [""])[0] or 0)
 print(f"Red:     {red!r}")
@@ -82,8 +83,8 @@ print(f"Opacity: {opacity!r}")
 
 
 # Example 5
-red_str = my_values.get("red", [""])
-red = int(red_str[0]) if red_str[0] else 0
+red_str = my_values.get("red", [""]) #get value for key else empty list
+red = int(red_str[0]) if red_str[0] else 0 #test on empty lsit then 0
 green_str = my_values.get("green", [""])
 green = int(green_str[0]) if green_str[0] else 0
 opacity_str = my_values.get("opacity", [""])
@@ -99,7 +100,7 @@ print(f"Opacity: {opacity!r}")
 
 # Example 6
 green_str = my_values.get("green", [""])
-if green_str[0]:
+if green_str[0]:#test on empty list
     green = int(green_str[0])
 else:
     green = 0
@@ -107,14 +108,14 @@ print(f"Green:   {green!r}")
 
 
 # Example 7
-def get_first_int(values, key, default=0):
+def get_first_int(values, key, default=0):#function return item from dict else default to 0
     found = values.get(key, [""])
     if found[0]:
         return int(found[0])
     return default
 
 # Example 8
-green = get_first_int(my_values, "green")
+green = get_first_int(my_values, "green")#use general function to get value from dict
 print(f"Green:   {green!r}")
 
 pictures = {}

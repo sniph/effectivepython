@@ -51,7 +51,7 @@ atexit.register(close_open_files)
 
 # Example 1
 # range(3) => items 0,1,2 zo 3 elements
-for i in range(3):
+for i in range(3):#range 0,1,2 <3 end for loop then else block
     print("Loop", i)
 # stops with else block
 else:
@@ -63,14 +63,20 @@ for i in range(3):
     print("Loop", i)
     # stops the for loop at i =1
     # then break out of loop no else block
-    if i == 1:
+    if i == 1:#break out of for loop with if then no else block
         break
 else:
     print("Else block!")
 
 
 # Example 3
-for x in []:
+for x in []:#empty list direct else block
+    print("Never runs")
+# only else bock for doesn't iterate over empty list
+else:
+    print("For Else block!")
+
+for x in [1]:#non-emptt list runs for loop then else block
     print("Never runs")
 # only else bock for doesn't iterate over empty list
 else:
@@ -78,7 +84,14 @@ else:
 
 
 # Example 4
-while False:
+while False:#doesn't run only else block
+    print("Never runs")
+# first while block doesn't run else
+# block does
+else:
+    print("While Else block!")
+
+#while True:#endless loop
     print("Never runs")
 # first while block doesn't run else
 # block does
@@ -95,8 +108,8 @@ for i in range(2, min(a, b) + 1):
     print("Testing", i)
     # test both number on divison by i
     # close with else block
-    if a % i == 0 and b % i == 0:
-        print("Not coprime")
+    if a % i == 0 and b % i == 0:#if both numbers have a divisor next to int 1 then no coprime
+        print("Not coprime")#breaks with not coprime no else block
         break
 else:
     print("Coprime")
@@ -107,28 +120,28 @@ def coprime(a, b):
     # test divison of a,b by i mod 0 with helper function
     for i in range(2, min(a, b) + 1):
         if a % i == 0 and b % i == 0:
-            return False
-    return True
+            return False #returns string False => no coprime
+    return True #if for loop fails then return string True so coprime no other divisor next to 1
 
 
 assert coprime(4, 9)
 assert not coprime(3, 6)
-print(coprime(4, 9))
-print(coprime(3, 6))
+print(coprime(4, 9)) #=> True coprime
+print(coprime(3, 6))#=> False not coprime
 
 # Example 7
 def coprime_alternate(a, b):
-    is_coprime = True
+    is_coprime = True #initial coprime True
     # initial True check for for false check in function
     # else initial still true
     for i in range(2, min(a, b) + 1):
         if a % i == 0 and b % i == 0:
-            is_coprime = False
+            is_coprime = False #if not comprime False
             break
     return is_coprime
 
 
 assert coprime_alternate(4, 9)
-assert not coprime_alternate(3, 6)
+assert not coprime_alternate(3, 6) #use of negate in unit test
 print(coprime_alternate(4, 9))
 print(coprime_alternate(3, 6))
