@@ -51,7 +51,7 @@ atexit.register(close_open_files)
 
 # Example 1
 a = ["a", "b", "c", "d", "e", "f", "g", "h"]
-print("Middle two:  ", a[3:5])
+print("Middle two:  ", a[3:5]) #3=>fourth item
 print("All but ends:", a[1:7])
 
 
@@ -64,7 +64,7 @@ print(a[:5], "==", a[0:5])
 # Example 3
 # from item 6,7,8 pos 6 is included
 assert a[5:] == a[5 : len(a)]
-print(a[5:], " ==", a[5 : len(a)])
+print(a[5:], " ==", a[5 : len(a)])#len(a) geeft lengte list aan
 
 
 # Example 4
@@ -93,17 +93,17 @@ a[-3:-1]  #                          ['f', 'g']
 
 # Example 6
 # means all list shorter then 20 items
-first_twenty_items = a[:20]
+first_twenty_items = a[:20]#till pos 20
 print(first_twenty_items)
 
 # means all list shorter then 20 items
-last_twenty_items = a[-20:]
+last_twenty_items = a[-20:]#from end the 20 pos back
 print(last_twenty_items)
 
 # Example 7
 # item 20 doesn't exist in the list
 try:
-    a[20]
+    a[20]#list has 8 pos
 except:
     logging.exception("Expected")
 else:
@@ -112,9 +112,9 @@ else:
 
 # Example 8
 # a = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-b = a[3:]
+b = a[3:]#assign part a to list b
 print("Before:   ", b)  # d-h
-b[1] = 99
+b[1] = 99 #assign 99 to pos 2
 print("After:    ", b)  # 2 pos is 99
 print("No change:", a)  # all
 
@@ -122,7 +122,7 @@ print("No change:", a)  # all
 # Example 9
 # replace part of list with new list
 print("Before ", a)
-a[2:7] = [99, 22, 14]  # 3 pos till pos 8 => c-g = 99,22,14
+a[2:7] = [99, 22, 14]  # 3 pos till pos 8 => c-g = 99,22,14 even diiferent format replace
 print("After  ", a)
 
 
@@ -131,7 +131,7 @@ print("After  ", a)
 print("Before ", a)
 a[2:3] = [47, 11]  # pos 3 => 47,11
 # 99 is now 47,11
-print("After  ", a)
+print("After  ", a) #even 1 pos replace by 2
 
 
 # Example 11
@@ -140,24 +140,31 @@ print("After  ", a)
 b = a[:]  # b gets copy of a values are the same reference not
 print(b)
 print(a)
-assert b == a and b is not a  # True(same values) and True(not same ref/object)
+assert b == a and b is not a  # True(same values => ==) and True(not same ref/object =>is not)
 print(b == a, "and", b is not a)
 print(id(a) == id(b))
+print(id(a) is id(b))
+print(id(a))
+print(id(b))
 
 # Example 12
-b = a
-print(id(a) == id(b))
+b = a #assign value a to b
+print(id(a) == id(b))#value of the id's is  the same
+print(id(a) is id(b))
 print("Before a", a)
 print("Before b", b)
-assert b == a and b is not a
-print(b == a, "and", b is not a)
-print(id(a) == id(b))
+assert b == a and b is not a #
+print(b == a, "and", b is not a)#value referenced by a and b is the same => '==' , but is another name/object => is/is not
+print(id(a) == id(b))#a and b have another id number
+print(id(a)) #a and b have same object id number
+print(id(b))
+
 
 a[:] = [101, 102, 103]
-print(b)
+print(b)#b point to a
 print(a)
-print(id(a) == id(b))
-assert a is b  # Still the same list object
+print(id(a) == id(b)) #same id'd
+assert a is b  # Still the same list object referend by a and b
 print("After a ", a)  # Now has different contents
 print("After b ", b)  # Same list, so same contents as a
 assert b == a and b is not a

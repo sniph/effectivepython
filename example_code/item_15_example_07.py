@@ -19,7 +19,7 @@
 # Python 3.5
 # class gives strings in the normal
 class MyClass:
-    def __init__(self):
+    def __init__(self):#create dict in class by structure name = str pair
         self.alligator = "hatchling"
         self.elephant = "calf"
 
@@ -27,7 +27,7 @@ class MyClass:
 # initiation oof class
 a = MyClass()
 # loop over with dict
-for key, value in a.__dict__.items():
+for key, value in a.__dict__.items():#dict method converse to key/value pair from class
     print("%s = %s" % (key, value))
 
 # python 3.10 way
@@ -39,4 +39,4 @@ class MyClass:
 
 a = MyClass()
 for key, value in a.__dict__.items():
-    print(f"{key} = {value}")
+    print(f"{key} = {value}")#print with f format and {name} construct

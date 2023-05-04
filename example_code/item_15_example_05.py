@@ -23,12 +23,12 @@ def my_func(**kwargs):
         print("%s = %s" % (key, value))
 
 
-my_func(goose="gosling", kangaroo="joey")
+my_func(goose="gosling", kangaroo="joey")#function excepts key/value pair as kwargs
 
 # python 3.10 way
 def my_func(**kwargs):
     for key, value in kwargs.items():
-        print(f"{key} = {value}")
+        print(f"{key} = {value}")#use f notation istead of % more clear directly
 
 
 my_func(goose="gosling", kangaroo="joey")

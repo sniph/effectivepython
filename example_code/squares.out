@@ -1,0 +1,34 @@
+@!@!@STARTMSG 2262:0 @!@!@
+TLC2 Version 2.16 of 31 December 2020 (rev: cdddf55)
+@!@!@ENDMSG 2262 @!@!@
+@!@!@STARTMSG 2187:0 @!@!@
+Running breadth-first search Model-Checking with fp 124 and seed 4272361862443749797 with 1 worker on 2 cores with 227MB heap and 64MB offheap memory (Windows Server 2019 10.0 x86, Oracle Corporation 1.8.0_361 x86, MSBDiskFPSet, DiskStateQueue).
+@!@!@ENDMSG 2187 @!@!@
+@!@!@STARTMSG 2220:0 @!@!@
+Starting SANY...
+@!@!@ENDMSG 2220 @!@!@
+Parsing file C:\GIT\effectivepython\example_code\squares.tla
+Parsing file C:\Users\HarrySnippe\AppData\Local\Temp\2\TLC.tla
+Parsing file C:\Users\HarrySnippe\AppData\Local\Temp\2\Integers.tla
+Parsing file C:\Users\HarrySnippe\AppData\Local\Temp\2\Naturals.tla
+Parsing file C:\Users\HarrySnippe\AppData\Local\Temp\2\Sequences.tla
+Parsing file C:\Users\HarrySnippe\AppData\Local\Temp\2\FiniteSets.tla
+Semantic processing of module Naturals
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module TLC
+Semantic processing of module Integers
+Semantic processing of module squares
+@!@!@STARTMSG 2219:0 @!@!@
+SANY finished.
+@!@!@ENDMSG 2219 @!@!@
+@!@!@STARTMSG 2185:0 @!@!@
+Starting... (2023-04-25 12:05:35)
+@!@!@ENDMSG 2185 @!@!@
+@!@!@STARTMSG 2229:1 @!@!@
+The initial predicate Init specified in the configuration file
+is not defined in the specification.
+@!@!@ENDMSG 2229 @!@!@
+@!@!@STARTMSG 2186:0 @!@!@
+Finished in 941ms at (2023-04-25 12:05:35)
+@!@!@ENDMSG 2186 @!@!@

@@ -52,33 +52,33 @@ atexit.register(close_open_files)
 # Example 1
 x = ["red", "orange", "yellow", "green", "blue", "purple"]
 
-odds = x[::2]  # alternating values 0,2,4
-evens = x[1::2]  # alternating values 1,3,5
+odds = x[::2]  # alternating values 0,2,4 with step 2
+evens = x[1::2]  # alternating values 1,3,5 with step 2
 print(odds)
 print(evens)
 
 
 # Example 2
 x = b"mongoose"
-print(x[::1])
-y = x[::-1]  # reverse values
+print(x[::1])#take every character fro start
+y = x[::-1]  # reverse values - take every character from begin from end
 print(y)
 
 
 # Example 3
 x = "寿司"
-y = x[::-1]  # reverse values
+y = x[::-1]  # reverse values even unknown character group 
 print(y)
 
 
 # Example 4
 try:
     w = "寿司"
-    x = w.encode("utf-8")
+    x = w.encode("utf-8")#converse to bytes
     print(x)
-    y = x[::-1]
+    y = x[::-1]#reverse bytes
     print(y)
-    z = y.decode("utf-8")
+    z = y.decode("utf-8")#converse to string gives error
     print(z)
 except:
     logging.exception("Expected")

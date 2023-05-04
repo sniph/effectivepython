@@ -18,7 +18,7 @@
 # Example 1
 # Python 3.5
 # print the following as set
-baby_names = {
+baby_names = {#by way of creating {str:str} ssse as key/value pair
     "cat": "kitten",
     "dog": "puppy",
 }

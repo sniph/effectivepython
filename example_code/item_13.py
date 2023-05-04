@@ -53,20 +53,21 @@ atexit.register(close_open_files)
 try:
     car_ages = [0, 9, 4, 8, 7, 20, 19, 1, 6, 15]
     car_ages_descending = sorted(car_ages, reverse=True)
-    oldest, second_oldest = car_ages_descending
+    oldest, second_oldest = car_ages_descending #error cannot unpack rest of list to var need *var
 except:
     logging.exception("Expected")
 else:
     assert False
+print(second_oldest)
 # use *second_oldest to get excess list of items
 car_ages = [0, 9, 4, 8, 7, 20, 19, 1, 6, 15]
 car_ages_descending = sorted(car_ages, reverse=True)
-oldest, *second_oldest = car_ages_descending
+oldest, *second_oldest = car_ages_descending #assign list to vars
 print(oldest, second_oldest)
 
 # Example 2
 # split items over variables last var is list
-oldest = car_ages_descending[0]
+oldest = car_ages_descending[0] #every part of list is individually assigned below
 second_oldest = car_ages_descending[1]
 others = car_ages_descending[2:]
 print(oldest, second_oldest, others)
@@ -74,24 +75,24 @@ print(oldest, second_oldest, others)
 
 # Example 3
 # use * for list assignent
-oldest, second_oldest, *others = car_ages_descending
+oldest, second_oldest, *others = car_ages_descending #now assign different parts of list in one line
 print(oldest, second_oldest, others)
 
 
 # Example 4
 # first,others[],last
-oldest, *others, youngest = car_ages_descending
+oldest, *others, youngest = car_ages_descending #can breakup assignment of list
 print(oldest, youngest, others)
 
 # others[],forlast,last
-*others, second_youngest, youngest = car_ages_descending
+*others, second_youngest, youngest = car_ages_descending #berakup list by choice
 print(youngest, second_youngest, others)
 
 
 # Example 5
 try:
     # This will not compile no division of items so use no *
-    source = """*others = car_ages_descending"""
+    source = """*others = car_ages_descending""" #there is just one list assigned to one var no *var
     eval(source)
 except:
     logging.exception("Expected")
@@ -102,7 +103,7 @@ else:
 # Example 6
 try:
     # This will not compile # source iunclear in divided items
-    source = """first, *middle, *second_middle, last = [1, 2, 3, 4]"""
+    source = """first, *middle, *second_middle, last = [1, 2, 3, 4]""" #cannot use *var twice not clear what to assign to *vars
     eval(source)
 except:
     logging.exception("Expected")
@@ -116,7 +117,7 @@ car_inventory = {
     "Airport": ("Skyline", "Viper", "Gremlin", "Nova"),
 }
 # unpack items from dict
-((loc1, (best1, *rest1)), (loc2, (best2, *rest2))) = car_inventory.items()
+((loc1, (best1, *rest1)), (loc2, (best2, *rest2))) = car_inventory.items() #multiple var* in key/tuple combinations one *var per tuple
 
 print(f"Best at {loc1} is {best1}, {len(rest1)} others")
 print(f"Best at {loc2} is {best2}, {len(rest2)} others")
@@ -125,7 +126,7 @@ print(f"Best at {loc2} is {best2}, {len(rest2)} others")
 # Example 8
 # spli list over variables even if no rest []
 short_list = [1, 2]
-first, second, *rest = short_list
+first, second, *rest = short_list #if list is short rest can be assigned to *var even if *var is []
 print(first, second, rest)
 
 
@@ -133,13 +134,14 @@ print(first, second, rest)
 # it as only 2 items more items gives error too many items
 it = iter(range(1, 3))
 [i for i in range(1, 4)]
-first, second = it
+#first, second = it
+first, second,*other = it #will have [] for other
 print(it)
-print(f"{first} and {second}")
+print(f"{first} and {second} and {other}")
 
 
 # Example 10
-def generate_csv():
+def generate_csv(): #create csv with heading and 100 lines per yield
     yield ("Date", "Make", "Model", "Year", "Price")
     for i in range(100):
         yield ("2019-03-25", "Honda", "Fit", "2010", "$3400")
@@ -149,12 +151,12 @@ def generate_csv():
 # Example 11
 # instanciate the function then print else only object id
 all_csv_rows = list(generate_csv())
-print(generate_csv)
-print(all_csv_rows)
+print(generate_csv) #prints object
+print(all_csv_rows)#header and 200 lines
 # first row/item
-header = all_csv_rows[0]
+header = all_csv_rows[0] #first item of list
 # rest of the rows/items
-rows = all_csv_rows[1:]
+rows = all_csv_rows[1:] #rest of list
 print("CSV Header:", header)
 print("Row count: ", len(rows))
 
@@ -162,6 +164,6 @@ print("Row count: ", len(rows))
 # Example 12
 it = generate_csv()
 # unpack the items in one go by * assign
-header, *rows = it
+header, *rows = it #assign direct header and rest to vars in one line
 print("CSV Header:", header)
 print("Row count: ", len(rows))
