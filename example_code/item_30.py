@@ -55,47 +55,52 @@ atexit.register(close_open_files)
 # enumerate generate index,item pair use generator like list
 # "result" looks for index number of " " characters in address string
 def index_words(text):
-    result = []
+    result = []#create list as bucket
     # if there is text append first item append(0) then index + 1
-    if text:
-        result.append(0)
-    for index, letter in enumerate(text):
-        if letter == " ":
+    if text:#test on text
+        result.append(0)#assign "0" to list
+    for index, letter in enumerate(text):#loop over text number every character even space
+        if letter == " ":#filter for space then append value of first letter of next word to list
             result.append(index + 1)
     return result
 
+ 
 
 # Example 2
 address = "Four score and seven years ago..."
-address = "Four score and seven years ago our fathers brought forth on this continent a new nation, conceived in liberty, and dedicated to the proposition that all men are created equal."
+address1 = "Four score and seven years ago our fathers brought forth on this continent a new nation, conceived in liberty, and dedicated to the proposition that all men are created equal."
 # generate index/value pairs list
-a = list(enumerate(address))
+print(index_words(address))
+
+a = list(enumerate(address))#number all characters in string
 print(a)
 
 result = index_words(address)
 # print all
-print(result)
+print(result)#[0, 5, 11, 15, 21, 27]
 # first 10 reults
-print(result[:10])
+print(result[:4])#first 4 results -> [0, 5, 11, 15]
 
 
 # Example 3
 # if text then append text 0 to list else if letter = " " append index + 1
 # "next" statement returns following value
-def index_words_iter(text):
+def index_words_iter(text):#(function) def index_words_iter(text: Any) -> Generator[int, Any, None]
     if text:
         yield 0
-    for index, letter in enumerate(text):
+    for index, letter in enumerate(text):#loop over text with enumerate to create indexed elements
         if letter == " ":
             yield index + 1
 
 
 # Example 4
 # "it" object to use for iterator next/lsit method
-it = index_words_iter(address)
-print(next(it))
-print(next(it))
+it = index_words_iter(address)#generator to be next over to get every next element
 
+print(it)#<generator object index_words_iter at 0x000001D89FF5C430>
+print(next(it))#next get element and remove from generator object
+print(next(it))
+print(list(it))#list method returns the last status of it after the next methods
 
 # Example 5
 # "list" method generates list over the enumerate yields for every item in address
@@ -106,20 +111,20 @@ print(result[:10])
 # Example 6
 
 
-def index_file(handle):
+def index_file(handle):#peel the structure from line to word to letter
     # initialize the offset of the file
     offset = 0
-    for line in handle:
+    for line in handle:#loop over lines in file
         # if there is a line true
-        if line:
+        if line:#first line return offset index
             # return value offset
             yield offset
         # loop over lines
-        for letter in line:
+        for letter in line:#loop over characters in line and number with offset index
             # for every letter and ! to "offset" variable
             offset += 1
             # if letter is space then return offset number
-            if letter == " ":
+            if letter == " ":# filter on space then return the offset index
                 yield offset
 
 
@@ -132,16 +137,16 @@ are created equal."""
 # here are the example files stored
 # TEST_DIR = tempfile.TemporaryDirectory()
 #'C:\\Users\\HARRYS~1\\AppData\\Local\\Temp\\2\\tmphvfh2fyp'>
-with open("address.txt", "w") as f:
+with open("address.txt", "w") as f:#write text to file
     f.write(address_lines)
 
 import itertools
 
 # read the file to f:
-with open("address.txt", "r") as f:
+with open("address.txt", "r") as f:#read file content and assign to var
     # assign data to "it" variable pass through index_file function
     it = index_file(f)
     # get the first 10 items from "it" variable with islice
-    results = itertools.islice(it, 0, 10)
+    results = itertools.islice(it, 0, 10)#use islice to get part of generator object elements to var results
     # use "list" method to generate a list of results object
-    print(list(results))
+    print(list(results))#use list method to unpack generator as list

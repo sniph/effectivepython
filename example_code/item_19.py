@@ -50,7 +50,7 @@ atexit.register(close_open_files)
 
 
 # Example 1
-def get_stats(numbers):
+def get_stats(numbers):#function input number output tuple (min,max)
     minimum = min(numbers)
     maximum = max(numbers)
     return minimum, maximum
@@ -60,24 +60,24 @@ lengths = [63, 73, 72, 60, 67, 66, 71, 61, 72, 70]
 
 # assign/unpack the return values max.min from function
 # to variables
-minimum, maximum = get_stats(lengths)  # Two return values
+minimum, maximum = get_stats(lengths)  # Two return values assign to vars
 
 print(f"Min: {minimum}, Max: {maximum}")
 
 
 # Example 2
 # assign to values to two variables
-first, second = 1, 2
+first, second = 1, 2#assign 2 numbers to vars
 assert first == 1
 assert second == 2
 
 
-def my_function():
+def my_function():#function return to static numbers
     return 1, 2
 
 
 # assign two values to 2 variables through function
-first, second = my_function()
+first, second = my_function()#assign return function to vars
 assert first == 1
 assert second == 2
 
@@ -88,14 +88,14 @@ assert second == 2
 def get_avg_ratio(numbers):
     average = sum(numbers) / len(numbers)
     # x divided by average to determine ratio
-    scaled = [x / average for x in numbers]
+    scaled = [x / average for x in numbers]#every number from list divide by average
     # sort smal to big
-    scaled.sort(reverse=True)
+    scaled.sort(reverse=True)#list sort reverse and assign
     return scaled
 
 
 # divide/unpack list in 3 pieces 2 var and middle list
-longest, *middle, shortest = get_avg_ratio(lengths)
+longest, *middle, shortest = get_avg_ratio(lengths)#assign parts of list to vars
 
 print(f"Longest:  {longest:>4.0%}")
 print(f"Shortest: {shortest:>4.0%}")
@@ -127,7 +127,7 @@ def get_stats(numbers):
 
 
 # assign 5 variables from function is positional
-minimum, maximum, average, median, count = get_stats(lengths)
+minimum, maximum, average, median, count = get_stats(lengths)#assign return to vars
 
 print(f"Min: {minimum}, Max: {maximum}")
 print(f"Average: {average}, Median: {median}, Count {count}")
@@ -141,7 +141,7 @@ assert count == 10
 # Verify odd count median
 # variables are positional dummyvariables by "_"
 # _, _, _, median, count = get_stats([1, 2, 3])
-_, _, _, median, count = get_stats([1, 2, 3])
+_, _, _, median, count = get_stats([1, 2, 3])#assign only two of 5 vars
 assert median == 2
 assert count == 3
 
@@ -154,7 +154,7 @@ print(f"Min: {minimum}, Max: {maximum}")
 print(f"Average: {average}, Median: {median}, Count {count}")
 
 # Oops! Median and average swapped:
-minimum, maximum, median, average, count = get_stats(lengths)
+minimum, maximum, median, average, count = get_stats(lengths)#assign is positional
 print(f"Min: {minimum}, Max: {maximum}")
 print(f"Average: {average}, Median: {median}, Count {count}")
 

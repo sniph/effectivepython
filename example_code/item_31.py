@@ -54,17 +54,17 @@ atexit.register(close_open_files)
 # get total and assign individual percentages to "result" list
 def normalize(numbers):
     total = sum(numbers)
-    result = []
-    for value in numbers:
-        percent = 100 * value / total
-        result.append(percent)
+    result = []#init list by structure
+    for value in numbers:#loop over numbers
+        percent = 100 * value / total#get percentage part of every element in list
+        result.append(percent)#add to list by append method
     return result
 
 
 # Example 2
 # use "visits" list in function to assign items to "percent" list
 visits = [15, 35, 80]
-percentages = normalize(visits)
+percentages = normalize(visits)#get percentual part of element of list
 print(percentages)
 assert sum(percentages) == 100.0
 
@@ -87,8 +87,9 @@ def read_visits(data_path):
 # Example 4
 # assigndata to "it" list
 it = read_visits("my_numbers.txt")
+#print(list(it))
 # assign the percentages calculated from "ït" list
-percentages = normalize(it)
+percentages = normalize(list(it))#use list method else [] generator versus list in func
 print(percentages)
 
 
@@ -96,15 +97,15 @@ print(percentages)
 # go over "it" generator object with "list" method
 # second call generates []
 it = read_visits("my_numbers.txt")
-print(list(it))
-print(list(it))  # Already exhausted
+print(list(it))#list method on generator once
+print(list(it))  # Already exhausted in second call of list method
 
 
 # Example 6
 # assign "numbers" under "list" method to  "numbers_copy" list
 # assign calculated percentages to "results" list
 def normalize_copy(numbers):
-    numbers_copy = list(numbers)  # Copy the iterator
+    numbers_copy = list(numbers)  # Copy the iterator from generator to list object concert input to list
     total = sum(numbers_copy)
     result = []
     for value in numbers_copy:
@@ -116,7 +117,7 @@ def normalize_copy(numbers):
 # Example 7
 # run multiple times with same outcome "list" methode on generator now short-cuts to new list
 it = read_visits("my_numbers.txt")
-percentages = normalize_copy(it)
+percentages = normalize_copy(it)#get list from func and assign to var list
 print(percentages)
 assert sum(percentages) == 100.0
 
@@ -127,18 +128,18 @@ assert sum(percentages) == 100.0
 def normalize_func(get_iter):
     # call data enew with lambda as argument =>get_iter()
     total = sum(get_iter())  # New iterator
-    result = []
+    result = []#init list
     # call data again for the loop iteration and create "result" list
-    for value in get_iter():  # New iterator
+    for value in get_iter():  # New iterator -> loop over anon func as generator
         percent = 100 * value / total
-        result.append(percent)
+        result.append(percent)#add to list
     return result
 
 
 # Example 9
 # feed argument as lambda function on path
 path = "my_numbers.txt"
-percentages = normalize_func(lambda: read_visits(path))
+percentages = normalize_func(lambda: read_visits(path))#input anon func to get file and content then func to get list
 print(percentages)
 assert sum(percentages) == 100.0
 
@@ -147,14 +148,14 @@ assert sum(percentages) == 100.0
 # create class for setup generator iter to process lines when called bij iterator
 
 
-class ReadVisits:
+class ReadVisits:#return will be generator see iter part
     def __init__(self, data_path):
         self.data_path = data_path
 
-    def __iter__(self):
+    def __iter__(self):#create generator over data in file
         with open(self.data_path) as f:
-            for line in f:
-                yield int(line)
+            for line in f: #loop over lines in file
+                yield int(line)#convert str to int
 
 
 def normalize(numbers):
@@ -169,8 +170,9 @@ def normalize(numbers):
 # Example 11
 # initilize instance of "ReadVisits" class with "path" argument
 # read in the data from path/file in "visits" variable
-visits = ReadVisits(path)
-percentages = normalize(visits)
+visits = ReadVisits(path)#create new class -> <__main__.ReadVisits object at 0x000001D89FF82980>
+print(visits)
+percentages = normalize(visits)#generator as input then append to list
 print(percentages)
 assert sum(percentages) == 100.0
 
@@ -178,8 +180,8 @@ assert sum(percentages) == 100.0
 # Example 12
 #"is" test if "numbers" argument is an iter identity if same object
 #container type can be used multiple times instead of iter type
- def normalize_defensive(numbers):
-    if iter(numbers) is numbers:  # An iterator -- bad!
+def normalize_defensive(numbers):
+    if iter(numbers) is numbers:  # An iterator -- bad! 
         raise TypeError("Must supply a container")
     total = sum(numbers)
     result = []
@@ -190,7 +192,7 @@ assert sum(percentages) == 100.0
 
 #call "normalize_defensive" function to test for iter or container
 visits = [15, 35, 80]
-normalize_defensive(visits)  # No error
+normalize_defensive(visits)  # No error can iter over list return also list
 
 #now "it" as argument is passed as iter
 #it: <list_iterator object at 0x000001389244D840>
@@ -199,7 +201,7 @@ it = iter(visits)
 try:
     #will generate false feed is iterator need container like list
     normalize_defensive(it)
-except TypeError:
+except TypeError:#TypeError: Must supply a container so get passed
     pass
 else:
     assert False
@@ -214,34 +216,35 @@ def normalize_defensive(numbers):
         raise TypeError("Must supply a container")
     total = sum(numbers)
     result = []
-    for value in numbers:
+    for value in numbers:#loop over list is option
         percent = 100 * value / total
         result.append(percent)
     return result
 
 #this works feed container
 visits = [15, 35, 80]
-normalize_defensive(visits)  # No error
+normalize_defensive(visits)  # No error list is iterable
 
 #this not feed is iter
-it = iter(visits)
+it = iter(visits)#<list_iterator object at 0x000001D89FF835B0>
+print(list(it))
 try:
-    normalize_defensive(it)
-except TypeError:
+    normalize_defensive(list(it))#makes list from iterable
+except TypeError:#TypeError: Must supply a container
     pass
 else:
-    assert False
+    assert False#AssertionError because its True iterator-iterable-list
 
 
 # Example 14
 #feed is container pass test for iter
 visits = [15, 35, 80]
-percentages = normalize_defensive(visits)
+percentages = normalize_defensive(visits)#list as input
 assert sum(percentages) == 100.0
 
 #feed is containre pass test for iter
 visits = ReadVisits(path)
-percentages = normalize_defensive(visits)
+percentages = normalize_defensive(visits)#or genarator as input
 assert sum(percentages) == 100.0
 
 
@@ -249,8 +252,8 @@ assert sum(percentages) == 100.0
 #feed fails pass iter to "normalize_defensive" function
 try:
     visits = [15, 35, 80]
-    it = iter(visits)
-    normalize_defensive(it)
+    it = iter(visits)#is iterator should list or generator
+    normalize_defensive(it)#TypeError: Must supply a container
 except:
     logging.exception("Expected")
 else:

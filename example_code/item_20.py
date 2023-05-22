@@ -53,9 +53,9 @@ atexit.register(close_open_files)
 # test try block division catch ZeroDivisionError with return None
 def careful_divide(a, b):
     try:
-        return a / b
+        return a / b#for the result division
     except ZeroDivisionError:
-        return None
+        return None#when except raised divided by 0
 
 
 assert careful_divide(4, 2) == 2
@@ -68,10 +68,10 @@ assert careful_divide(1, 0) == None
 x, y = 1, 0
 result = careful_divide(x, y)
 # zero division return "None" true when message else result
-if result is None:
+if result is None:#return from function on except is None
     print("Invalid inputs")
 else:
-    print("Result is %.1f" % result)
+    print("Result is %.1f" % result)#if not None return from function
 
 
 # Example 3
@@ -79,8 +79,8 @@ x, y = 0, 5
 result = careful_divide(x, y)
 print(result)
 # result of 0 evaluates to false (not false => true) if true get activated wrongly
-if not result:
-    print("Invalid inputs")  # This runs! But shouldn't
+if not result:#0 or empty -> False so not False -> True
+    print("Invalid inputs")  # This runs! But shouldn't because 0/5 is correct but 0
 else:
     assert False
 
@@ -89,9 +89,9 @@ else:
 # use with test extra value true/false
 def careful_divide(a, b):
     try:
-        return True, a / b
+        return True, a / b #True if not divide by 0
     except ZeroDivisionError:
-        return False, None
+        return False, None #False only when divide by 0
 
 
 assert careful_divide(4, 2) == (True, 2)
@@ -112,7 +112,7 @@ def careful_divide(a, b):
 assert careful_divide(4, 2) == 2
 assert careful_divide(0, 1) == 0
 assert careful_divide(3, 6) == 0.5
-assert careful_divide(1, 0) == None
+assert careful_divide(1, 0) == None#zero divide
 
 print(careful_divide(0, 1))
 print(careful_divide(0, 1) == 0)
@@ -123,17 +123,17 @@ print(careful_divide(0, 1) == 0)
 
 def careful_divide(a, b):
     try:
-        return True, a / b
+        return True, a / b#True divide by not 0
     except ZeroDivisionError:
-        return False, None
+        return False, None#False divide by 0
 
 
 x, y = 5, 0
 # x, y = 0, 5
-success, result = careful_divide(x, y)
+success, result = careful_divide(x, y)#assign outcome function to vars
 # if success assign to false the (not false) =>True that's when y = 0 and
 # returm is False,None
-if not success:
+if not success:#if divide by 0
     print("Invalid inputs")
 print(success, result)
 
@@ -146,9 +146,9 @@ def careful_divide(a, b):
 
 
 x, y = 5, 0
-_, result = careful_divide(x, y)
+_, result = careful_divide(x, y)#just assign to result var
 # test on result if None the "not None" gives True for if statement
-if not result:
+if not result:#0 result to False -> not False -> true for divide by 0
     print("Invalid inputs")
 
 print(not result)
@@ -168,7 +168,7 @@ def careful_divide(a, b):
 x, y = 5, 0
 # use the valueerror to return the message else result
 try:
-    result = careful_divide(x, y)
+    result = careful_divide(x, y)#divide by 0 raise error in func return except
 except ValueError:
     print("Invalid inputs")
 else:
@@ -186,13 +186,14 @@ def careful_divide(a: float, b: float) -> float:
     """
     try:
         return a / b
-    except ZeroDivisionError as e:
+    except ZeroDivisionError as e:#when divide by 0 raise error
         raise ValueError("Invalid inputs")
 
 
 print(careful_divide(5, 0))
 
 # when ZeroDivisionError raise value error and is now passed
+#test for expected divide by 0
 try:
     result = careful_divide(1, 0)
     assert False

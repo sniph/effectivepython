@@ -60,9 +60,9 @@ def log(message, when=datetime.now()):
     print(f"{when}: {message}")
 
 
-log("Hi there!")
-sleep(0.1)
-log("Hello again!")
+log("Hi there!")#current time
+sleep(0.1)#delay of 0.1 sec
+log("Hello again!")#still old urrent time no refresh
 
 
 # Example 2
@@ -77,16 +77,16 @@ def log(message, when=None):
         when: datetime of when the message occurred.
             Defaults to the present time.
     """
-    if when is None:
-        when = datetime.now()
+    if when is None:#always True
+        when = datetime.now()#assign current time every call to var when
     print(f"{when}: {message}")
 
 
 # Example 3
 # run the function twice assign datetime twice
-log("Hi there!")
+log("Hi there!")#current time
 sleep(0.1)
-log("Hello again!")
+log("Hello again!")#refreshed current time new call new assign to var
 
 
 # Example 4
@@ -103,24 +103,35 @@ def decode(data, default={}):
 
 # Example 5
 # 2 calls of function same set returns with added value data
-foo = decode("bad data")
+foo = decode("bad data")#this assign {} to "bad data:"
+print("bad data:", foo)
+
 foo["stuff"] = 5
+print("Foo:", foo)
+print("bad data:", foo)#also item added to dict
+print(foo)
+
 bar = decode("also bad")
-bar["meep"] = 1
 print("Foo:", foo)
 print("Bar:", bar)
+print(foo)
 
+
+bar["meep"] = 1
+print("Foo:", foo)#bar and foo reference to foo dict "{'stuff': 5, 'meep': 1}"
+print("Bar:", bar)
+print(foo)
 
 # Example 6
 # 2 calls same return for separate variables
-assert foo is bar
+assert foo is bar#bar and foo reference to foo dict "{'stuff': 5, 'meep': 1}"
 print(foo is bar)
 
 
 # Example 7
 # assign "None" as default and return result try block with test
 # every call to function gives a new set
-def decode(data, default=None):
+def decode(data, default=None):#by default = None instead {} cuases reload of json to seperate dicts
     """Load JSON data from a string.
 
     Args:
@@ -132,7 +143,7 @@ def decode(data, default=None):
         return json.loads(data)
     except ValueError:
         if default is None:
-            default = {}
+            default = {}#create new dict per name
         return default
 
 
@@ -140,8 +151,11 @@ def decode(data, default=None):
 # 2 variables with the data from seperate calls
 foo = decode("bad data")
 foo["stuff"] = 5
+print(foo)#seperate assign to dict
 bar = decode("also bad")
 bar["meep"] = 1
+print(bar)
+
 print("Foo:", foo)
 print("Bar:", bar)
-assert foo is not bar
+assert foo is not bar#seperate assign to dict

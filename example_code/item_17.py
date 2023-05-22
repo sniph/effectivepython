@@ -58,13 +58,18 @@ print(visits)
 
 # Example 2
 # assign key set to key if not {} add value to set
-visits.setdefault("France", set()).add("Arles")  # Short
+
+visits.setdefault("France", set())#assign set() as key/value -> 'key:set()'
+print(visits)
+visits.setdefault("France", set()).add("Arles")  # Short replace set() in key/set() pair by add method
+print(visits)
 
 # assign value to set of the key else get method defaults to "None"
 # test on "None" then assign empty set {}
-if (japan := visits.get("Japan")) is None:  # Long
-    visits["Japan"] = japan = set()
-japan.add("Kyoto")
+if (japan := visits.get("Japan")) is None:  # Long look for key in dict with key/set pairs 
+    visits["Japan"] = japan = set() #set set() to key/set() pair in dict and assign set() to var japan
+print(japan)#var japan 
+japan.add("Kyoto")#replace set() in var japan if empty else add to existing element in key/set
 
 # swap print statement with pprint
 original_print = print
@@ -80,23 +85,24 @@ print = original_print
 # make class with city add method
 class Visits:
     def __init__(self):
-        self.data = {}
+        self.data = {}#set data to empty set {}
 
     def add(self, country, city):
         # make key,set combinations within data set
-        city_set = self.data.setdefault(country, set())
+        city_set = self.data.setdefault(country, set())#assign key/set() or existing key/set to dict city_set 
         city_set.add(city)
 
 
-print(visits)
+
 
 # Example 4
 # initialize visits variable from  class Visits:
-visits = Visits()
+visits = Visits()#assign class object to visits
+print(visits)
 # use add method from class Visits to add cities to countries set
-visits.add("Russia", "Yekaterinburg")
+visits.add("Russia", "Yekaterinburg")#use add method from class Visits
 visits.add("Tanzania", "Zanzibar")
-print(visits.data)
+print(visits.data)#use data method from class Visits
 
 
 # Example 5
@@ -112,6 +118,9 @@ class Visits:
 
 
 visits = Visits()
-visits.add("England", "Bath")
-visits.add("England", "London")
+print(visits.data)#defaultdict(<class 'set'>, {})
+#visits.add("England",set())
+print(visits.data)
+visits.add("England", "Bath")#assign key/set pair to dict
+visits.add("England", "London")#assign set to existing key/set pair ->add method from class Visits needs key/set pair as input
 print(visits.data)

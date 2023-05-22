@@ -52,7 +52,7 @@ atexit.register(close_open_files)
 # Example 1
 # function on other function to change outcome func=trace(func) same as @trace
 # before function call
-def trace(func):
+def trace(func):#decorator function to pprint with !r and f" for all calls
     def wrapper(*args, **kwargs):
         result = func(*args, **kwargs)
         print(f"{func.__name__}({args!r}, {kwargs!r}) " f"-> {result!r}")
@@ -82,7 +82,7 @@ def fibonacci(n):
     return fibonacci(n - 2) + fibonacci(n - 1)
 
 
-fibonacci = trace(fibonacci)
+fibonacci = trace(fibonacci)#this is what decorator means @trace
 print(fibonacci)
 
 

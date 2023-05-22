@@ -53,7 +53,7 @@ atexit.register(close_open_files)
 # list in list comprehension possible double for loop
 # first smallest item x in row, then row in matrix to peel off structure
 matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-flat = [x for row in matrix for x in row]
+flat = [x for row in matrix for x in row]#get list from list(list) then x from list
 print(flat)
 
 
@@ -61,7 +61,8 @@ print(flat)
 # change the matrix first x in row then row in matrix
 # insert comprehnsion for list on row level then adopt for matrix as row
 
-squared = [[x**2 for x in row] for row in matrix]
+squared = [[x**2 for x in row] for row in matrix]#create list in list by structure and 
+                                                #expression as list for list in list(list)
 print(squared)
 
 
@@ -72,7 +73,8 @@ my_lists = [
     [[1, 2, 3], [4, 5, 6]],
     [[7, 8, 9], [10, 11, 12]],
 ]
-flat = [x for sublist1 in my_lists for sublist2 in sublist1 for x in sublist2]
+flat = [x for sublist1 in my_lists for sublist2 in sublist1 for x in sublist2]#first count back from
+#list(list) in list(list(list())) then list in list(list) then element in list
 print(flat)
 
 
@@ -80,18 +82,18 @@ print(flat)
 # the convetional way to unpack matrix structure to list by for loops
 # from meta to detail as loop over lower order to higher level
 flat = []
-for sublist1 in my_lists:
-    for sublist2 in sublist1:
-        flat.extend(sublist2)
+for sublist1 in my_lists:#unpack with for loop list(list) in list(list(list()))
+    for sublist2 in sublist1:#unpack list in list(list)
+        flat.extend(sublist2)#unpack list with extend method on list
 print(flat)
 
 
 # Example 5
 a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 # comprehension with double if's x>4 (unspoken and)mod 2
-b = [x for x in a if x > 4 if x % 2 == 0]
+b = [x for x in a if x > 4 if x % 2 == 0]#create new list with filter >4 and diviable by 2 with implicit "and"
 # comprehension with  if and expressed "and"
-c = [x for x in a if x > 4 and x % 2 == 0]
+c = [x for x in a if x > 4 and x % 2 == 0]#create new list with filter >4 and diviable by 2 with clear "and" statement
 print(b)
 print(c)
 assert b and c
@@ -102,5 +104,7 @@ print(b == c)
 # Example 6
 # if's on x in row and row in matrix level
 matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-filtered = [[x for x in row if x % 3 == 0] for row in matrix if sum(row) >= 10]
+filtered = [[x for x in row if x % 3 == 0] for row in matrix if sum(row) >= 10]#expression in list dividable by 3 lowest level list then 
+                                                                                #refer to location of list in structure -> list in list(list)
+                                                                                #even sum filter on list
 print(filtered)

@@ -56,15 +56,15 @@ try:
     class MyError(Exception):
         pass
 
-    def my_generator():
+    def my_generator():#yield make func generator object
         yield 1
         yield 2
         yield 3
 
-    it = my_generator()
-    print(next(it))  # Yield 1
-    print(next(it))  # Yield 2
-    print(it.throw(MyError("test error")))
+    it = my_generator()#instance of generator
+    print(next(it))  # Yield 1 call generator once
+    print(next(it))  # Yield 2 call generator twice
+    print(it.throw(MyError("test error")))#way to get error by throw method
 except:
     logging.exception("Expected")
 else:
@@ -75,11 +75,11 @@ else:
 # first call with next value 1, second call with next value 2 in try block
 # third call with next value after yield output value 4 throw error(receive and send part in call for throws exception)
 def my_generator():
-    yield 1
+    yield 1#first call
 
     try:
-        yield 2
-    except MyError:
+        yield 2#second call
+    except MyError:#thirt is an except because try loop has one value then execpt
         print("Got MyError!")
     else:
         yield 3
@@ -87,7 +87,7 @@ def my_generator():
     yield 4
 
 
-it = my_generator()
+it = my_generator()#value 1 ,2 can be reached 3 ,4 not with next method on generator
 print(next(it))  # Yield 1
 print(next(it))  # Yield 2
 print(it.throw(MyError("test error")))
@@ -100,16 +100,16 @@ class Reset(Exception):
 
 # "timer" generator function counts back to zero
 def timer(period):
-    current = period
-    while current:
+    current = period#assign var with value
+    while current:#
         current -= 1
         try:
-            yield current
+            yield current #after last yield except ->class pass
         except Reset:
             current = period
 
 
-print(list(timer(3)))
+print(list(timer(3)))#list calls all yields of generator to list [2, 1, 0]
 
 # Example 4
 class Reset(Exception):
@@ -162,14 +162,14 @@ def run():
             break
         # after every cycle else part of try block returns announce print remaining cycles
         else:
-            announce(current)
+            announce(current)#will be called every loop ->"3 ticks remaining" etc.
 
 
 run()
 
 
 # Example 5
-class Timer:
+class Timer:#compact class with vars init, reset and iter method we'll use for this exemple
     def __init__(self, period):
         self.current = period
         self.period = period
@@ -177,7 +177,7 @@ class Timer:
     def reset(self):
         self.current = self.period
 
-    def __iter__(self):
+    def __iter__(self):#creates generator
         while self.current:
             self.current -= 1
             yield self.current
@@ -203,12 +203,12 @@ RESETS = [
 
 def run():
     # initialize Timer class =>"timer " variable with 4 cycles
-    timer = Timer(4)
+    timer = Timer(4)#timer class gives a generator
     # loop over timer check RESETS list if True rest, announce per cycle interval
     # every event as function in class makes it more obvious
-    for current in timer:
-        if check_for_reset():  # check RESETS list
-            timer.reset()  # reset timer
+    for current in timer:#loop over generator
+        if check_for_reset():  # check RESETS list very clear false/true in list
+            timer.reset()  # reset timer reset period
         announce(current)
 
 

@@ -127,7 +127,7 @@ class SortedDict(MutableMapping):
 
     def __iter__(self):
         keys = list(self.data.keys())
-        keys.sort()
+        #keys.sort()#kan probleem
         for key in keys:
             yield key
 
@@ -135,22 +135,30 @@ class SortedDict(MutableMapping):
         return len(self.data)
 
 my_dict = SortedDict()
-my_dict['otter'] = 1
+my_dict['otter'] = 1 #assign value to dict
 my_dict['cheeta'] = 2
 my_dict['anteater'] = 3
 my_dict['deer'] = 4
+
+print(my_dict['otter'])
 
 assert my_dict['otter'] == 1
 
 assert 'cheeta' in my_dict
 del my_dict['cheeta']
-assert 'cheeta' not in my_dict
+assert 'cheeta' not in my_dict #by de l method in class remove key
 
 expected = [('anteater', 3), ('deer', 4), ('otter', 1)]
-assert list(my_dict.items()) == expected
+a= list(my_dict.items())
+a.sort()
+
+print(a)
+
+assert a == expected #list as to be the same sort sequence
+assert list(my_dict.items()) == expected #assertion error not sorted against sorted
 
 assert not isinstance(my_dict, dict)
-
+print(isinstance(my_dict,dict))#false so my_dict is not a dict type
 
 # Example 14
 sorted_ranks = SortedDict()
@@ -162,18 +170,18 @@ print(winner)
 
 # Example 15
 def get_winner(ranks):
-    for name, rank in ranks.items():
+    for name, rank in ranks.items():#take item with rank 1 out of dict
         if rank == 1:
             return name
 
-winner = get_winner(sorted_ranks)
+winner = get_winner(sorted_ranks)#or get item through special class
 print(winner)
 
 
 # Example 16
 try:
     def get_winner(ranks):
-        if not isinstance(ranks, dict):
+        if not isinstance(ranks, dict):#test for ranks == dict returns error
             raise TypeError('must provide a dict instance')
         return next(iter(ranks))
     

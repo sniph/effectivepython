@@ -54,7 +54,7 @@ atexit.register(close_open_files)
 def safe_division(number, divisor, ignore_overflow, ignore_zero_division):
     try:
         return number / divisor
-    except OverflowError:
+    except OverflowError:#proceeds because of intercept error else raise and true/false flag of kind of error
         if ignore_overflow:
             return 0
         else:
@@ -68,13 +68,13 @@ def safe_division(number, divisor, ignore_overflow, ignore_zero_division):
 
 # Example 2
 # assign 4 values for call of function
-result = safe_division(1.0, 10**500, True, False)
+result = safe_division(1.0, 10**500, True, True)
 print(result)
 
 
 # Example 3
 # set exepct false/true if needed
-result = safe_division(1.0, 0, False, True)
+result = safe_division(1.0, 0, False, True)#intercept error by except and true/false flag of kind of error else raise error
 print(result)
 
 
@@ -102,20 +102,27 @@ def safe_division_b(
 result = safe_division_b(1.0, 10**500, ignore_overflow=True)
 print(result)
 
+result = safe_division_b(1.0, 0, ignore_overflow=True)#error division as default error
+print(result)
+
 # sets 1 keyword argument to True other is still default
 result = safe_division_b(1.0, 0, ignore_zero_division=True)
+print(result)
+
+result = safe_division_b(1.0, 10**500, ignore_zero_division=True)#not except for overflow is default error
 print(result)
 
 
 # Example 6
 # even positinal ovverride of defaults in function
-assert safe_division_b(1.0, 10**500, True, False) == 0
+assert safe_division_b(1.0, 10**500, True, False) == 0#overflow except is set to true positional
 print(safe_division_b(1.0, 10**500, True, False))
 
 # Example 7
 # use of "*" after arguments, raises error if keyword arguments are given as postional
 def safe_division_c(
-    number, divisor, *, ignore_overflow=False, ignore_zero_division=False  # Changed
+    number, divisor, *, ignore_overflow=False, ignore_zero_division=False  # unclear number pos args by *
+    #number, divisor,ignore_overflow=False, ignore_zero_division=False #works as tried 4 args
 ):
     try:
         return number / divisor
@@ -135,7 +142,7 @@ def safe_division_c(
 # this raise error 4 postional argument given only 2 arguments in function
 # "*" and 2 keyword arguments
 try:
-    safe_division_c(1.0, 10**500, True, False)
+    safe_division_c(1.0, 10**500, True, False)#4 positional args is problem
 except:
     logging.exception("Expected")
 else:
@@ -144,13 +151,14 @@ else:
 
 # Example 9
 # use 2 positional arguments and a keyword argument with assigned value
-result = safe_division_c(1.0, 0, ignore_zero_division=True)
+result = safe_division_c(1.0, 0, ignore_zero_division=True)#2 pos args and 1 kwarg is fine
 
 assert result == float("inf")
 
 
 try:
-    result = safe_division_c(1.0, 0)
+    result = safe_division_c(1.0, 0)#2 positional rest default
+    
 
 except ZeroDivisionError:
     print("expected:", result)
@@ -166,8 +174,8 @@ print(result)
 # make use of changed arguments named or positional keyword arguments are defaulted
 assert safe_division_c(number=2, divisor=5) == 0.4
 assert safe_division_c(divisor=5, number=2) == 0.4
-assert safe_division_c(2, divisor=5) == 0.4
-
+assert safe_division_c(2, divisor=5) == 0.4#because firts is positional
+#assert safe_division_c(number=2, 5) == 0.4 #positional always before keywoord arg
 
 # Example 11
 # problem with argument naming call differnt from function call naming
@@ -195,19 +203,25 @@ def safe_division_c(
 # Example 12
 # call with different arguments than the default
 try:
-    safe_division_c(number=2, divisor=5)
+    safe_division_c(number=2, divisor=5)#refer to right keyarg names
 except:
     logging.exception("Expected")
 else:
     assert False
 
+try:
+    safe_division_c(numerator=2, denominator=5)##refer to right keyarg names
+except:
+    logging.exception("Expected")
+else:
+    assert True
 
 # Example 13
 # "/" follows positional arguments only
 def safe_division_d(
     numerator,
     denominator,
-    /,
+   /, #places before this token must be positional
     *,  # Changed
     ignore_overflow=False,
     ignore_zero_division=False,
@@ -235,7 +249,9 @@ print(safe_division_d(2, 5))
 # Example 15
 # call with keyword arguments gives error
 try:
-    safe_division_d(numerator=2, denominator=5)
+    safe_division_d(numerator=2, denominator=5)#with use of ""/" as arg befor token must positional
+    #TypeError: safe_division_d() got some positional-only arguments passed as keyword arguments: 'numerator, denominator'
+
 except:
     logging.exception("Expected")
 else:
@@ -274,13 +290,17 @@ result = safe_division_e(22, 7)
 print(result)
 
 # third positional argument optional has default
-result = safe_division_e(22, 7, 5)
+result = safe_division_e(22, 7, 5)#3 arg between "/" and "*" can be positional are keyword arg 
 print(result)
 
 # third positional argument optional has default also named assigned
-result = safe_division_e(22, 7, ndigits=2)
+result = safe_division_e(22, 7, ndigits=2)#3 arg between "/" and "*" can be positional are keyword arg 
 print(result)
 
 # keyword argument optional has defaults can be changed too
-result = safe_division_e(22, 7, ndigits=2, ignore_overflow=True)
+result = safe_division_e(22, 7, ndigits=2, ignore_overflow=True)# after "*" token is keyword arg
+print(result)
+
+result = safe_division_e(22, 7, ndigits=2, True)# after "*" token is keyword arg
+                                                #SyntaxError: positional argument follows keyword argument
 print(result)

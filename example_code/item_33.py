@@ -51,19 +51,19 @@ atexit.register(close_open_files)
 
 # Example 1
 # yield returns an item per call
-def move(period, speed):
+def move(period, speed):#generator object use next or list to unpack
     for _ in range(period):
         yield speed
 
 
-def pause(delay):
+def pause(delay):#generator object use next or list to unpack
     for _ in range(delay):
         yield 0
 
 
 # Example 2
 # yield the different functions
-def animate():
+def animate():#generator object use next or list to unpack
     for delta in move(4, 5.0):
         yield delta
     for delta in pause(3):
@@ -73,9 +73,9 @@ def animate():
 
 
 # will execute 4 times with next over animate function
-print(next(animate()))
+print(next(animate()))#get next item
 # call "animate" function with "list" method assign to "a" list
-a = list(animate())
+a = list(animate())#get all remaining items after next method
 print(a)
 
 # Example 3
@@ -90,13 +90,13 @@ def run(func):
         render(delta)
 
 
-run(animate)
+run(animate)#animate func as input to func run and then func render as way to decoration
 
 
 # Example 4
 # "yield from" statement is same as "yield" but place in function differnt
 # yield makes a generator function
-def animate_composed():
+def animate_composed():#use yield without loop statement same effect
     yield from move(4, 5.0)
     yield from pause(3)
     yield from move(2, 3.0)
@@ -116,13 +116,13 @@ def child():
 
 
 # loop over loop with yield
-def slow():
+def slow():#here it's yield over yield twice same method
     for i in child():
         yield i
 
 
 # get one loop over yield more direct
-def fast():
+def fast():#here "yield from" method over yield is faster runtime and shorter code
     yield from child()
 
 

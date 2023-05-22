@@ -68,7 +68,7 @@ remainder(20, divisor=7)
 
 # both keyword arguments can be switchted
 remainder(number=20, divisor=7)
-remainder(divisor=7, number=20)
+remainder(divisor=7, number=20)#kwarg is not positional
 
 
 # Example 3
@@ -86,12 +86,26 @@ else:
 # Example 4
 # test change positional with keyword argument get een except message
 try:
-    remainder(20, number=7)
+    remainder(20, number = 7)
 except:
     logging.exception("Expected")
 else:
     assert False
 
+
+try:
+    remainder(7,divisor=20)#positional first then kwarg
+except:
+    logging.exception("Expected")
+else:
+    assert True
+
+try:
+    remainder(number=7,20)#positional first else error
+except:
+    logging.exception("Expected")
+else:
+    assert True
 
 # Example 5
 # read the set wiith keywords in the function with "**kwargs" not positional
@@ -99,7 +113,7 @@ my_kwargs = {
     "number": 20,
     "divisor": 7,
 }
-assert remainder(**my_kwargs) == 6
+assert remainder(**my_kwargs) == 6#get dict as input for kwargs
 
 
 # Example 6
@@ -107,14 +121,14 @@ assert remainder(**my_kwargs) == 6
 my_kwargs = {
     "divisor": 7,
 }
-assert remainder(number=20, **my_kwargs) == 6
-assert remainder(20, **my_kwargs) == 6
+assert remainder(number=20, **my_kwargs) == 6#even part of arg can be kwarg from dict
+assert remainder(20, **my_kwargs) == 6#first element of arg is positional, rest can be kwargs from dict
 assert (
     remainder(
         **my_kwargs,
         number=20,
     )
-    == 6
+    == 6#sees kwargs as not positional if taken from dict
 )
 
 # Example 7
@@ -125,20 +139,20 @@ my_kwargs = {
 other_kwargs = {
     "divisor": 7,
 }
-assert remainder(**my_kwargs, **other_kwargs) == 6
+assert remainder(**my_kwargs, **other_kwargs) == 6#split kwargs in different dicts
 # even nog the working of the function stays correct mod numbers by divisior
-assert remainder(**other_kwargs, **my_kwargs) == 6
+assert remainder(**other_kwargs, **my_kwargs) == 6#also not positional kwargs from differnt dicts
 print(remainder(**other_kwargs, **my_kwargs))
 
 # Example 8
 # for every key,value pair in input function runs
-def print_parameters(**kwargs):
+def print_parameters(**kwargs):#kwargs is a dict so can call key/value
     for key, value in kwargs.items():
         # is a list of tuples with key,value pairs
-        print(kwargs.items())
+        print(kwargs.items())#"dict_items([('alpha', 1.5), ('beta', 9), ('gamma', 4)])"
         print(f"{key} = {value}")
-        a = [x for x in kwargs]
-        print(a)
+        #a = [x for x in kwargs]
+        #print(a)
 
         # print(**kwargs)
 
@@ -154,7 +168,8 @@ def flow_rate(weight_diff, time_diff):
 
 weight_diff = 0.5
 time_diff = 3
-flow = flow_rate(weight_diff, time_diff)
+flow = flow_rate(weight_diff, time_diff)#is positional ->0.167 kg per second
+#flow = flow_rate(time_diff,weight_diff)#->6.0 kg per second
 # 3 cijfers achter de komma
 print(f"{flow:.3} kg per second")
 
@@ -167,7 +182,8 @@ def flow_rate(weight_diff, time_diff, period):
 
 # Example 11
 # assign return function to variable with a positional and keyword argument
-flow_per_second = flow_rate(weight_diff, time_diff, 1)
+flow_per_second = flow_rate(weight_diff, time_diff, 1)#is positional even var name doesn't mean no positional
+print(flow_per_second)
 flow_per_second = flow_rate(time_diff, weight_diff, 1)
 print(flow_per_second)
 
@@ -180,7 +196,7 @@ def flow_rate(weight_diff, time_diff, period=1):
 # Example 13
 # if variable is set in runtime it's positional
 flow_per_second = flow_rate(weight_diff, time_diff)
-flow_per_hour = flow_rate(weight_diff, time_diff, period=3600)
+flow_per_hour = flow_rate(weight_diff, time_diff, period=3600)#overwrite arg with named arg and new value
 # gives positional error
 # flow_per_hour = flow_rate(weight_diff, period=3600, time_diff)
 print(flow_per_second)
@@ -195,23 +211,25 @@ def flow_rate(weight_diff, time_diff, period=1, units_per_kg=1):
 # Example 15
 # if you assign value in function call it overrides the default value
 #
-pounds_per_hour = flow_rate(weight_diff, time_diff, period=3600, units_per_kg=2.2)
-print(pounds_per_hour)
+pounds_per_hour = flow_rate(weight_diff, time_diff)
+print(pounds_per_hour)#omit means defaults values for arg
+pounds_per_hour = flow_rate(weight_diff, time_diff, period=3600, units_per_kg=2.2)#is positional input for func positional
+print(pounds_per_hour)#overwrite args by new values
 
 
 # Example 16
 # even if you call function with values
 #default in function can also be positional again by assign values directly
-pounds_per_hour = flow_rate(weight_diff, time_diff, 3600, 2.2)
+pounds_per_hour = flow_rate(weight_diff, time_diff, 3600, 2.2)#also take static values instaed named
 print(pounds_per_hour)
 
 #omit defaults keywords is no problem
 pounds_per_hour = flow_rate(weight_diff, time_diff)
-print(pounds_per_hour)
+print(pounds_per_hour)#takes default values ->0.16666666666666666
 
-#changing position of keywords in call is no Problem
+#changing position of keywords in call is  Problem outcome different
 pounds_per_hour = flow_rate(time_diff, weight_diff )
-print(pounds_per_hour)
+print(pounds_per_hour)#->6.0
 
 #keyword with default value is optional but also positional
 weight_diff = 0.5
@@ -221,11 +239,15 @@ period = 1
 def flow_rate(weight_diff, time_diff, period=1, units_per_kg=1):
     return ((weight_diff * units_per_kg) / time_diff) * period
 
-#pounds_per_hour = flow_rate(time_diff, weight_diff,period=1 )
-#print(pounds_per_hour)
+pounds_per_hour = flow_rate(period=1,weight_diff,time_diff )#Positional argument cannot appear after keyword arguments ->kwarg is period=1 other vars are positional
+
+pounds_per_hour = flow_rate(time_diff, weight_diff,period=1 )
+print(pounds_per_hour)#->6.0 vars differnt location then function wrong answer
+
+
 period=2
 #assign new value to keyword arg makes it positional
-pounds_per_hour = flow_rate(period=2, time_diff, weight_diff )
+pounds_per_hour = flow_rate(period=1, time_diff, weight_diff )
 print(pounds_per_hour)
 
 

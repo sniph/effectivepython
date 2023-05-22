@@ -56,19 +56,22 @@ import random
 # C:\Users\HarrySnippe\AppData\Local\Temp\2\tmpqsgv3sqc =>see TESTDIR
 # tmpqsgv3sqc start script
 with open("my_file.txt", "w") as f:
-    for _ in range(10):
-        f.write("a" * random.randint(0, 100))
-        f.write("\n")
+    for _ in range(10):#loop 10 times
+        f.write("a" * random.randint(0, 100))#write multiple "a" times random 0-100
+        f.write("\n")#then newline
 
 # use list comprehension to calculate length of lines in file
-value = [len(x) for x in open("my_file.txt")]
+value = [len(x) #expression length line
+         for x in open("my_file.txt")] #loop over lines in file
 print(value)
 
 
 # Example 2
 # "it" varaible as generator object
-it = (len(x) for x in open("my_file.txt"))
-print(it)
+it = (len(x) #create tuple for length of lines
+      for x in open("my_file.txt"))
+print(it)#generator object
+#print(tuple(it))#generator object needs tuple method to create tuple takes all values in one go else next method
 
 
 # Example 3
@@ -76,14 +79,15 @@ print(it)
 # Traceback (most recent call last):
 # File "<stdin>", line 1, in <module>
 # StopIteration
-print(next(it))
-print(next(it))
+print(next(it))#take first item from tuple
+print(next(it))#take next item from tuple
 
 
 # Example 4
 # generator object roots created in tuple form
-roots = ((x, x**0.5) for x in it)
-print(roots)
+roots = ((x, x**0.5) 
+         for x in it)
+print(roots)#again generator object in tuple form
 
 # Example 5
 # next will generate till end file even if generator object is "root" instead of "it"
@@ -96,4 +100,4 @@ print(roots)
     and returns data to its caller using the yield keyword
 """
 
-print(next(roots))
+print(next(roots))#get first item of generator object use tuple method for all items
