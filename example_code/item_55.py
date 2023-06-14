@@ -145,7 +145,7 @@ for thread in threads:
 processed = len(done_queue.items)
 polled = sum(t.polled_count for t in threads)
 print(f'Processed {processed} items after '
-      f'polling {polled} times')
+      f'polling {polled} times')#Processed 1000 items after polling 3300 times
 
 
 # Example 11
@@ -159,13 +159,13 @@ def consumer():
     print('Consumer done')
 
 thread = Thread(target=consumer)
-thread.start()
+thread.start()#Consumer waiting
 
 
 # Example 12
-print('Producer putting')
+print('Producer putting')#Producer putting
 my_queue.put(object())          # Runs before get() above
-print('Producer done')
+print('Producer done')#Producer done
 thread.join()
 
 
@@ -186,10 +186,14 @@ thread.start()
 
 # Example 14
 my_queue.put(object())          # Runs first
-print('Producer put 1')
+print('Producer put 1')#Producer put 1
 my_queue.put(object())          # Runs third
-print('Producer put 2')
-print('Producer done')
+#Consumer got 1
+#Consumer got 2
+#Consumer done
+print('Producer put 2')#Producer put 2
+
+print('Producer done')#Producer done
 thread.join()
 
 
@@ -205,15 +209,18 @@ def consumer():
     in_queue.task_done()        # Done third
 
 thread = Thread(target=consumer)
-thread.start()
+thread.start()#Consumer waiting
 
 
 # Example 16
-print('Producer putting')
+print('Producer putting')#Producer putting
 in_queue.put(object())         # Done first
+#Consumer working
+#Consumer done
 print('Producer waiting')
+#Producer waiting
 in_queue.join()                # Done fourth
-print('Producer done')
+print('Producer done')#Producer done
 thread.join()
 
 
@@ -279,7 +286,7 @@ resize_queue.close()
 resize_queue.join()
 upload_queue.close()
 upload_queue.join()
-print(done_queue.qsize(), 'items finished')
+print(done_queue.qsize(), 'items finished')#1000 items finished
 
 for thread in threads:
     thread.join()
@@ -315,11 +322,11 @@ resize_threads = start_threads(
 upload_threads = start_threads(
     5, upload, upload_queue, done_queue)
 
-for _ in range(1000):
+for _ in range(1000):#stop queue after 1000
     download_queue.put(object())
 
 stop_threads(download_queue, download_threads)
 stop_threads(resize_queue, resize_threads)
 stop_threads(upload_queue, upload_threads)
 
-print(done_queue.qsize(), 'items finished')
+print(done_queue.qsize(), 'items finished')#1000 items finished

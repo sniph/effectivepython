@@ -68,12 +68,12 @@ class Point2D(Serializable):
         return f'Point2D({self.x}, {self.y})'
 
 point = Point2D(5, 3)
-print('Object:    ', point)
-print('Serialized:', point.serialize())
+print('Object:    ', point)#without json method but dunder rpr method
+print('Serialized:', point.serialize())#with json method
 
 
 # Example 3
-class Deserializable(Serializable):
+class Deserializable(Serializable):#extend class as own method with decorator
     @classmethod
     def deserialize(cls, json_data):
         params = json.loads(json_data)
@@ -91,11 +91,11 @@ class BetterPoint2D(Deserializable):
         return f'Point2D({self.x}, {self.y})'
 
 before = BetterPoint2D(5, 3)
-print('Before:    ', before)
+print('Before:    ', before)#Before:     Point2D(5, 3) returns the dunder rpr method
 data = before.serialize()
-print('Serialized:', data)
+print('Serialized:', data)#Serialized: {"args": [5, 3]} return dict like key/list pair
 after = BetterPoint2D.deserialize(data)
-print('After:     ', after)
+print('After:     ', after)#After:      Point2D(5, 3) return dunder rpr by latest class
 
 
 # Example 5
@@ -121,11 +121,11 @@ registry = {}
 def register_class(target_class):
     registry[target_class.__name__] = target_class
 
-def deserialize(data):
-    params = json.loads(data)
-    name = params['class']
+def deserialize(data):# input ->Serialized: {"class": "EvenBetterPoint2D", "args": [5, 3]}
+    params = json.loads(data)#use input/output for method with key/pair,key/list construct
+    name = params['class']#is the key
     target_class = registry[name]
-    return target_class(*params['args'])
+    return target_class(*params['args'])#use connect key ->value,key -> list
 
 
 # Example 7
@@ -140,11 +140,11 @@ register_class(EvenBetterPoint2D)
 
 # Example 8
 before = EvenBetterPoint2D(5, 3)
-print('Before:    ', before)
+print('Before:    ', before)#Before:     EvenBetterPoint2D(5, 3) use rpr method class name and loop over args
 data = before.serialize()
-print('Serialized:', data)
+print('Serialized:', data)#Serialized: {"class": "EvenBetterPoint2D", "args": [5, 3]} construct looks as dict of key/value and key/list pair
 after = deserialize(data)
-print('After:     ', after)
+print('After:     ', after)#After:      EvenBetterPoint2D(5, 3) 
 
 
 # Example 9
@@ -155,8 +155,9 @@ class Point3D(BetterSerializable):
         self.y = y
         self.z = z
 
-# Forgot to call register_class! Whoops!
 
+# Forgot to call register_class! Whoops!
+register_class(Point3D)
 
 # Example 10
 try:
@@ -166,18 +167,26 @@ try:
 except:
     logging.exception('Expected')
 else:
-    assert False
+    assert False#not false after ->register_class(Point3D)
 
+try:
+    point = Point3D(5, 9, -4)
+    data = point.serialize() #key/value,key/list construct
+    deserialize(data)#Point3D(5, 9, -4) 
+except:
+    logging.exception('Expected')
+else:
+    assert True#return ->Point3D(5, 9, -4) 
 
 # Example 11
 class Meta(type):
-    def __new__(meta, name, bases, class_dict):
+    def __new__(meta, name, bases, class_dict):#class,name,tuple and a dict
         cls = type.__new__(meta, name, bases, class_dict)
         register_class(cls)
         return cls
 
 class RegisteredSerializable(BetterSerializable,
-                             metaclass=Meta):
+                             metaclass=Meta):#to get the register class solved
     pass
 
 
@@ -188,25 +197,25 @@ class Vector3D(RegisteredSerializable):
         self.x, self.y, self.z = x, y, z
 
 before = Vector3D(10, -7, 3)
-print('Before:    ', before)
-data = before.serialize()
+print('Before:    ', before)#standard rpr method
+data = before.serialize()#return key/value,key/list
 print('Serialized:', data)
-print('After:     ', deserialize(data))
+print('After:     ', deserialize(data))#input return key/value,key/list construct
 
 
 # Example 13
-class BetterRegisteredSerializable(BetterSerializable):
+class BetterRegisteredSerializable(BetterSerializable):#call with register
     def __init_subclass__(cls):
         super().__init_subclass__()
         register_class(cls)
 
-class Vector1D(BetterRegisteredSerializable):
+class Vector1D(BetterRegisteredSerializable):#add var to class construct
     def __init__(self, magnitude):
         super().__init__(magnitude)
         self.magnitude = magnitude
 
-before = Vector1D(6)
+before = Vector1D(6)#standard call ->Before:     Vector1D(6)
 print('Before:    ', before)
 data = before.serialize()
-print('Serialized:', data)
-print('After:     ', deserialize(data))
+print('Serialized:', data)#Serialized: {"class": "Vector1D", "args": [6]}
+print('After:     ', deserialize(data))#After:      Vector1D(6)

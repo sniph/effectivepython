@@ -48,7 +48,7 @@ atexit.register(close_open_files)
 
 # Example 1
 names = ['Socrates', 'Archimedes', 'Plato', 'Aristotle']
-names.sort(key=len)
+names.sort(key=len)#sort will mutate list
 print(names)
 
 
@@ -57,33 +57,33 @@ def log_missing():
     print('Key added')
     return 0
 
-
+print(log_missing())#invoke func with print and return
 # Example 3
 from collections import defaultdict
 
-current = {'green': 12, 'blue': 3}
-increments = [
+current = {'green': 12, 'blue': 3}#create key/int dict
+increments = [#create list of tuples
     ('red', 5),
     ('blue', 17),
     ('orange', 9),
 ]
-result = defaultdict(log_missing, current)
+result = defaultdict(log_missing, current)#use of log  func unclear
 print('Before:', dict(result))
-for key, amount in increments:
+for key, amount in increments:#loop over list of tuples add to dict key/int pairs and update int
     result[key] += amount
 print('After: ', dict(result))
 
 
 # Example 4
-def increment_with_report(current, increments):
-    added_count = 0
+def increment_with_report(current, increments):#func on dict at list of tuples
+    added_count = 0#init var
 
     def missing():
-        nonlocal added_count  # Stateful closure
+        nonlocal added_count  # Stateful closure as global var -> outside func
         added_count += 1
         return 0
 
-    result = defaultdict(missing, current)
+    result = defaultdict(missing, current)#calls missing func for item not in dict
     for key, amount in increments:
         result[key] += amount
 
@@ -92,7 +92,8 @@ def increment_with_report(current, increments):
 
 # Example 5
 result, count = increment_with_report(current, increments)
-assert count == 2
+assert count == 2#called for missing item in dict
+print(count)
 print(result)
 
 
@@ -107,11 +108,12 @@ class CountMissing:
 
 
 # Example 7
-counter = CountMissing()
-result = defaultdict(counter.missing, current)  # Method ref
+counter = CountMissing()#initiate new class to create counter
+result = defaultdict(counter.missing, current)  # Method ref use start value for new items in dict
 for key, amount in increments:
     result[key] += amount
 assert counter.added == 2
+print(counter.added)
 print(result)
 
 
@@ -130,8 +132,8 @@ assert callable(counter)
 
 
 # Example 9
-counter = BetterCountMissing()
-result = defaultdict(counter, current)  # Relies on __call__
+counter = BetterCountMissing()#initiate new class counter
+result = defaultdict(counter, current)  # Relies on __call__ use start value add count new items in default dict
 for key, amount in increments:
     result[key] += amount
 assert counter.added == 2

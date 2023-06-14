@@ -47,7 +47,7 @@ atexit.register(close_open_files)
 
 
 # Example 1
-def factorize(number):
+def factorize(number):#test divide by i < number
     for i in range(1, number + 1):
         if number % i == 0:
             yield i
@@ -63,7 +63,7 @@ for number in numbers:
     list(factorize(number))
 
 end = time.time()
-delta = end - start
+delta = end - start #measure time of calculation
 print(f'Took {delta:.3f} seconds')
 
 
@@ -75,14 +75,14 @@ class FactorizeThread(Thread):
         super().__init__()
         self.number = number
 
-    def run(self):
+    def run(self):#runs the proces with thread
         self.factors = list(factorize(self.number))
 
 
 # Example 4
 start = time.time()
 
-threads = []
+threads = []#loop over list with call to thread class return list
 for number in numbers:
     thread = FactorizeThread(number)
     thread.start()
@@ -92,6 +92,7 @@ for number in numbers:
 # Example 5
 for thread in threads:
     thread.join()
+    print(thread)#<FactorizeThread(Thread-27, stopped 11952)>
 
 end = time.time()
 delta = end - start
@@ -102,7 +103,7 @@ print(f'Took {delta:.3f} seconds')
 import select
 import socket
 
-def slow_systemcall():
+def slow_systemcall():#build in delay with calls to socket
     select.select([socket.socket()], [], [], 0.1)
 
 
@@ -121,7 +122,7 @@ print(f'Took {delta:.3f} seconds')
 start = time.time()
 
 threads = []
-for _ in range(5):
+for _ in range(5):#use a delay with threading calls
     thread = Thread(target=slow_systemcall)
     thread.start()
     threads.append(thread)

@@ -48,7 +48,7 @@ atexit.register(close_open_files)
 
 # Example 1
 class Field:
-    def __init__(self, name):
+    def __init__(self, name):#init vars + get/set construct as dunder methods
         self.name = name
         self.internal_name = '_' + self.name
 
@@ -62,7 +62,7 @@ class Field:
 
 
 # Example 2
-class Customer:
+class Customer:#init set method of class
     # Class attributes
     first_name = Field('first_name')
     last_name = Field('last_name')
@@ -71,16 +71,16 @@ class Customer:
 
 
 # Example 3
-cust = Customer()
-print(f'Before: {cust.first_name!r} {cust.__dict__}')
+cust = Customer() 
+print(f'Before: {cust.first_name!r} {cust.__dict__}')#Before: '' {} empty dict
 cust.first_name = 'Euclid'
-print(f'After:  {cust.first_name!r} {cust.__dict__}')
+print(f'After:  {cust.first_name!r} {cust.__dict__}')#After:  'Euclid' {'_first_name': 'Euclid'} assign key/value to dict with dunder dict method
 
 
 # Example 4
 class Customer:
     # Left side is redundant with right side
-    first_name = Field('first_name')
+    first_name = Field('first_name')#var same as instance names
     last_name = Field('last_name')
     prefix = Field('prefix')
     suffix = Field('suffix')
@@ -89,7 +89,7 @@ class Customer:
 # Example 5
 class Meta(type):
     def __new__(meta, name, bases, class_dict):
-        for key, value in class_dict.items():
+        for key, value in class_dict.items():#fill the default dict by a loop 
             if isinstance(value, Field):
                 value.name = key
                 value.internal_name = '_' + key
@@ -98,7 +98,7 @@ class Meta(type):
 
 
 # Example 6
-class DatabaseRow(metaclass=Meta):
+class DatabaseRow(metaclass=Meta):#init meta class
     pass
 
 
@@ -114,12 +114,12 @@ class Field:
             return self
         return getattr(instance, self.internal_name, '')
 
-    def __set__(self, instance, value):
+    def __set__(self, instance, value):#set values assigned by meta class and use of instance
         setattr(instance, self.internal_name, value)
 
 
 # Example 8
-class BetterCustomer(DatabaseRow):
+class BetterCustomer(DatabaseRow):#no redudant var names and arg names
     first_name = Field()
     last_name = Field()
     prefix = Field()
@@ -127,22 +127,22 @@ class BetterCustomer(DatabaseRow):
 
 
 # Example 9
-cust = BetterCustomer()
-print(f'Before: {cust.first_name!r} {cust.__dict__}')
+cust = BetterCustomer()#init class
+print(f'Before: {cust.first_name!r} {cust.__dict__}')#Before: '' {}
 cust.first_name = 'Euler'
-print(f'After:  {cust.first_name!r} {cust.__dict__}')
+print(f'After:  {cust.first_name!r} {cust.__dict__}')#After:  'Euler' {'_first_name': 'Euler'}
 
 
 # Example 10
 try:
-    class BrokenCustomer:
+    class BrokenCustomer:#no call for parsing classes
         first_name = Field()
         last_name = Field()
         prefix = Field()
         suffix = Field()
     
     cust = BrokenCustomer()
-    cust.first_name = 'Mersenne'
+    cust.first_name = 'Mersenne'#TypeError: attribute name must be string, not 'NoneType
 except:
     logging.exception('Expected')
 else:
@@ -151,11 +151,11 @@ else:
 
 # Example 11
 class Field:
-    def __init__(self):
+    def __init__(self):#init vars
         self.name = None
         self.internal_name = None
 
-    def __set_name__(self, owner, name):
+    def __set_name__(self, owner, name):#connect instance with var dunder method all in one class als parsing var
         # Called on class creation for each descriptor
         self.name = name
         self.internal_name = '_' + name
@@ -170,13 +170,13 @@ class Field:
 
 
 # Example 12
-class FixedCustomer:
+class FixedCustomer:#call without redundend var name and arg name
     first_name = Field()
     last_name = Field()
     prefix = Field()
     suffix = Field()
 
 cust = FixedCustomer()
-print(f'Before: {cust.first_name!r} {cust.__dict__}')
+print(f'Before: {cust.first_name!r} {cust.__dict__}')#Before: '' {}
 cust.first_name = 'Mersenne'
-print(f'After:  {cust.first_name!r} {cust.__dict__}')
+print(f'After:  {cust.first_name!r} {cust.__dict__}')#After:  'Mersenne' {'_first_name': 'Mersenne'}

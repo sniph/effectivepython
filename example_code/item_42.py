@@ -50,7 +50,7 @@ atexit.register(close_open_files)
 class MyObject:
     def __init__(self):
         self.public_field = 5
-        self.__private_field = 10
+        self.__private_field = 10 #use of double underscore
 
     def get_private_field(self):
         return self.__private_field
@@ -62,12 +62,13 @@ assert foo.public_field == 5
 
 
 # Example 3
+#assert foo.__private_field == 10 #AttributeError: 'MyObject' object has no attribute '__private_field'. Did you mean: 'get_private_field'?
 assert foo.get_private_field() == 10
 
 
 # Example 4
 try:
-    foo.__private_field
+    foo.__private_field #call only through method ->foo.get_private_field()
 except:
     logging.exception('Expected')
 else:
@@ -79,12 +80,13 @@ class MyOtherObject:
     def __init__(self):
         self.__private_field = 71
 
-    @classmethod
+    @classmethod #parse args of class
     def get_private_field_of_instance(cls, instance):
         return instance.__private_field
 
 bar = MyOtherObject()
-assert MyOtherObject.get_private_field_of_instance(bar) == 71
+#assert bar.__private_field == 71 #AttributeError: 'MyOtherObject' object has no attribute '__private_field'
+assert MyOtherObject.get_private_field_of_instance(bar) == 71 
 
 
 # Example 6
@@ -98,7 +100,7 @@ try:
             return self.__private_field
     
     baz = MyChildObject()
-    baz.get_private_field()
+    #baz.get_private_field()
 except:
     logging.exception('Expected')
 else:
@@ -110,7 +112,7 @@ assert baz._MyParentObject__private_field == 71
 
 
 # Example 8
-print(baz.__dict__)
+print(baz.__dict__)#a dict is created default "_" as start of name_dict
 
 
 # Example 9
@@ -122,7 +124,7 @@ class MyStringClass:
         return str(self.__value)
 
 foo = MyStringClass(5)
-assert foo.get_value() == '5'
+assert foo.get_value() == '5'#call method to get value as string
 
 
 # Example 10
@@ -131,7 +133,7 @@ class MyIntegerSubclass(MyStringClass):
         return int(self._MyStringClass__value)
 
 foo = MyIntegerSubclass('5')
-assert foo.get_value() == 5
+assert foo.get_value() == 5#call method to get value as int
 
 
 # Example 11
@@ -153,7 +155,7 @@ class MyIntegerSubclass(MyStringClass):
 
 # Example 12
 try:
-    foo = MyIntegerSubclass(5)
+    foo = MyIntegerSubclass('5')#the value is not converted to int ->'5'
     foo.get_value()
 except:
     logging.exception('Expected')
@@ -178,11 +180,12 @@ class MyIntegerSubclass(MyStringClass):
 
 foo = MyIntegerSubclass(5)
 assert foo.get_value() == 5
+print(foo.get_value())#doesn't change to string
 
 
 # Example 14
 class ApiClass:
-    def __init__(self):
+    def __init__(self):#notice one underscore can be overwritten
         self._value = 5
 
     def get(self):
@@ -194,7 +197,13 @@ class Child(ApiClass):
         self._value = 'hello'  # Conflicts
 
 a = Child()
-print(f'{a.get()} and {a._value} should be different')
+print(f'{a.get()} and {a._value} should be different') #result strang -> "hello and hello should be different"
+
+mro_str = '\n'.join(repr(cls) for cls in Child.mro())#Return a type's method resolution order.
+print(mro_str)
+#<class '__main__.Child'>
+#<class '__main__.ApiClass'>
+#<class 'object'>
 
 
 # Example 15
@@ -211,4 +220,11 @@ class Child(ApiClass):
         self._value = 'hello'  # OK!
 
 a = Child()
-print(f'{a.get()} and {a._value} are different')
+print(f'{a.get()} and {a._value} are different')#(extra)"_" gives unmutable value for call
+
+mro_str = '\n'.join(repr(cls) for cls in Child.mro())#Return a type's method resolution order.
+print(mro_str)
+
+#<class '__main__.Child'>
+#<class '__main__.ApiClass'>
+#<class 'object'>

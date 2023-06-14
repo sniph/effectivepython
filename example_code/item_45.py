@@ -49,14 +49,15 @@ atexit.register(close_open_files)
 # Example 1
 from datetime import datetime, timedelta
 
-class Bucket:
+class Bucket:#init vars
     def __init__(self, period):
         self.period_delta = timedelta(seconds=period)
         self.reset_time = datetime.now()
         self.quota = 0
-
+        #print(self.quota)
+    
     def __repr__(self):
-        return f'Bucket(quota={self.quota})'
+        return f'Bucket(quota={self.quota})'#return value of var
 
 bucket = Bucket(60)
 print(bucket)
@@ -64,6 +65,7 @@ print(bucket)
 
 # Example 2
 def fill(bucket, amount):
+    print('start_fill_amount', amount)
     now = datetime.now()
     if (now - bucket.reset_time) > bucket.period_delta:
         bucket.quota = 0
@@ -73,6 +75,7 @@ def fill(bucket, amount):
 
 # Example 3
 def deduct(bucket, amount):
+    print('start_deduct_amount', amount)
     now = datetime.now()
     if (now - bucket.reset_time) > bucket.period_delta:
         return False  # Bucket hasn't been filled this period
@@ -84,28 +87,30 @@ def deduct(bucket, amount):
 
 # Example 4
 bucket = Bucket(60)
-fill(bucket, 100)
-print(bucket)
+print(bucket)#Bucket(quota=0)
+fill(bucket, 100)#use class vars in arg and set value
+print(bucket)#Bucket(quota=100)
 
 
 # Example 5
-if deduct(bucket, 99):
-    print('Had 99 quota')
+if deduct(bucket, 99):#use class vars and set value
+    print('Had 99 quota')#Had 99 quota
 else:
     print('Not enough for 99 quota')
-print(bucket)
+print(bucket)#Bucket(quota=1)
+print(deduct)
 
 
 # Example 6
-if deduct(bucket, 3):
-    print('Had 3 quota')
+if deduct(bucket, 3):#return deduct bool
+    print('Had 3 quota')#Not enough for 3 quota
 else:
     print('Not enough for 3 quota')
-print(bucket)
+print(bucket)#Bucket(quota=1)#no deduction
 
 
 # Example 7
-class NewBucket:
+class NewBucket:#init and getter setter construct with property in class
     def __init__(self, period):
         self.period_delta = timedelta(seconds=period)
         self.reset_time = datetime.now()
@@ -120,13 +125,19 @@ class NewBucket:
 # Example 8
     @property
     def quota(self):
+        print('start_getter_self.max_quota', self.max_quota)
+        print('start_getter_quota_consumed', self.quota_consumed)
         return self.max_quota - self.quota_consumed
 
 
 # Example 9
     @quota.setter
     def quota(self, amount):
+        print('start_setter_amount', amount)
+        print('start_setter_self.max_quota', self.max_quota)
         delta = self.max_quota - amount
+        print('start_setter_delta', delta)
+        print('start_setter_quota_consumed', self.quota_consumed)
         if amount == 0:
             # Quota being reset for a new period
             self.quota_consumed = 0
@@ -137,7 +148,7 @@ class NewBucket:
         else:
             # Quota being consumed during the period
             self.quota_consumed = delta
-
+        print('end_setter_quota_consumed', self.quota_consumed)
 
 # Example 10
 bucket = NewBucket(60)
@@ -161,17 +172,17 @@ print('Still', bucket)
 
 
 # Example 11
-bucket = NewBucket(6000)
+bucket = NewBucket(6000)#init class
 assert bucket.max_quota == 0
 assert bucket.quota_consumed == 0
 assert bucket.quota == 0
 
-fill(bucket, 100)
+fill(bucket, 100)#set var
 assert bucket.max_quota == 100
 assert bucket.quota_consumed == 0
 assert bucket.quota == 100
 
-assert deduct(bucket, 10)
+assert deduct(bucket, 10)#set vars and calculate new values vars
 assert bucket.max_quota == 100
 assert bucket.quota_consumed == 10
 assert bucket.quota == 90

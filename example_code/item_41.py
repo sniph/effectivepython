@@ -48,18 +48,18 @@ atexit.register(close_open_files)
 
 # Example 1
 class ToDictMixin:
-    def to_dict(self):
+    def to_dict(self):#output is dict
         return self._traverse_dict(self.__dict__)
 
 
 # Example 2
     def _traverse_dict(self, instance_dict):
-        output = {}
+        output = {}#init dict
         for key, value in instance_dict.items():
             output[key] = self._traverse(key, value)
         return output
 
-    def _traverse(self, key, value):
+    def _traverse(self, key, value):#test on type value dict,list etc.
         if isinstance(value, ToDictMixin):
             return value.to_dict()
         elif isinstance(value, dict):
@@ -134,7 +134,7 @@ print = orig_print
 import json
 
 class JsonMixin:
-    @classmethod
+    @classmethod #for parsing of args
     def from_json(cls, data):
         kwargs = json.loads(data)
         return cls(**kwargs)
@@ -175,3 +175,5 @@ serialized = """{
 deserialized = DatacenterRack.from_json(serialized)
 roundtrip = deserialized.to_json()
 assert json.loads(serialized) == json.loads(roundtrip)
+print(json.loads(serialized))
+print(json.loads(roundtrip))

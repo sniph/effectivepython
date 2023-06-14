@@ -51,7 +51,7 @@ class FrequencyList(list):
     def __init__(self, members):
         super().__init__(members)
 
-    def frequency(self):
+    def frequency(self):#summrize list as key/count dict
         counts = {}
         for item in self:
             counts[item] = counts.get(item, 0) + 1
@@ -61,7 +61,7 @@ class FrequencyList(list):
 # Example 2
 foo = FrequencyList(['a', 'b', 'a', 'c', 'b', 'a', 'd'])
 print('Length is', len(foo))
-foo.pop()
+foo.pop()#remove items from right to left ftom list
 print('After pop:', repr(foo))
 print('Frequency:', foo.frequency())
 
@@ -80,7 +80,7 @@ bar[0]
 
 
 # Example 5
-bar.__getitem__(0)
+bar.__getitem__(0)#same as bar[0]
 
 
 # Example 6

@@ -52,65 +52,65 @@ atexit.register(close_open_files)
 # Example 1
 # no print out if no return value
 # get al object lose frrom class object and test then repackage
-grades = {}
+grades = {}#create dict
 
 
-def add_student(name):
+def add_student(name):#add key/value pair with empty value to dict
     grades[name] = []
 
 
-def report_grade(name, score):
+def report_grade(name, score):#add value to key/value pair
     grades[name].append(score)
 
 
 # returns names and average_grade in tuple
-def average_grade(name):
+def average_grade(name):#calc average over key/value
     grades2 = grades[name]
     # use grades2 instead grades name conflict
     return sum(grades2) / len(grades2)
 
 
 print(grades)  # {}
-add_student("Isaac Newton")
+add_student("Isaac Newton")#add to key/value where value is empty list in dict
 print(grades)  # {'Isaac Newton': []}
 # add scores to name/score dict
 report_grade("Isaac Newton", 90)
 report_grade("Isaac Newton", 95)
 report_grade("Isaac Newton", 85)
-print(grades)  # {'Isaac Newton': [90, 95, 85]}
+print(grades)  # {'Isaac Newton': [90, 95, 85]} add to key/list dict
 
 
-b = average_grade("Isaac Newton")
+b = average_grade("Isaac Newton")#func on element of key/list dict 
 print(b)  # 90.0
 
 # then multiple functions and variable assignments packaged as class object
 class SimpleGradebook:
-    def __init__(self):
+    def __init__(self):#init dict
         self._grades = {}
 
-    def add_student(self, name):
+    def add_student(self, name):#add key/list to dict
         self._grades[name] = []
 
-    def report_grade(self, name, score):
+    def report_grade(self, name, score):#add value to key/list dict
         self._grades[name].append(score)
 
     # returns names and average_grade in tuple 
-    def average_grade(self, name):
+    def average_grade(self, name):#calc on element of key/list returns tuple
         grades = self._grades[name]
         return name, sum(grades) / len(grades)
 
 
 # Example 2
 # initialize book variable as new class SimpleGradebook
-book = SimpleGradebook()
-book.add_student("Isaac Newton")
+book = SimpleGradebook()#create instance of key/list dict
+book.add_student("Isaac Newton")#add element to key/list dict
 
 
-book.report_grade("Isaac Newton", 90)
+book.report_grade("Isaac Newton", 90)#add value to key/list dict
 book.report_grade("Isaac Newton", 95)
 book.report_grade("Isaac Newton", 85)
 
-print(book.average_grade("Isaac Newton"))
+print(book.average_grade("Isaac Newton"))#returns tuple from func
 
 
 # Example 3
@@ -122,13 +122,13 @@ class BySubjectGradebook:
         self._grades = {}  # Outer dict
 
     def add_student(self, name):
-        self._grades[name] = defaultdict(list)  # Inner dict
+        self._grades[name] = defaultdict(list)  # Inner dict key-key/list construct
 
     # Example 4
     def report_grade(self, name, subject, grade):
-        by_subject = self._grades[name]
-        grade_list = by_subject[subject]
-        grade_list.append(grade)
+        by_subject = self._grades[name]#key
+        grade_list = by_subject[subject]#second key
+        grade_list.append(grade)#add to key-key/list construct
         # return grade_list
 
     def average_grade(self, name):
@@ -141,7 +141,8 @@ class BySubjectGradebook:
 
 
 # Example 5
-book = BySubjectGradebook()
+book = BySubjectGradebook()#instanciated new class
+#print((book.add_student))
 book.add_student("Albert Einstein")
 book.report_grade("Albert Einstein", "Math", 75)
 book.report_grade("Albert Einstein", "Math", 65)
@@ -150,28 +151,29 @@ book.report_grade("Albert Einstein", "Gym", 95)
 
 
 print(book.average_grade("Albert Einstein"))
+print(book._grades)#{'Albert Einstein': defaultdict(<class 'list'>, {'Math': [75, 65], 'Gym': [90, 95]})} ->key-key/list construct
 
 # class BySubjectGradebook:
 # def __init__(self):
-grades = {}  # Outer dict
+grades = {}  # Outer dict define empty dict
 
 
 def add_student(name):
-    grades[name] = defaultdict(list)  # Inner dict
+    grades[name] = defaultdict(list)  # Inner dict define key ->key/list structure with default dict
 
 
 # Example 4
-def report_grade(name, subject, grade):
+def report_grade(name, subject, grade):#construct from other functions
     by_subject = grades[name]
     grade_list = by_subject[subject]
     grade_list.append(grade)
-    return name, by_subject, grade_list
+    return name, by_subject, grade_list#return defined as tuple
 
 
-def average_grade(name):
+def average_grade(name):#constuct data from other functions defined
     by_subject = grades[name]
     total, count = 0, 0
-    for grades in by_subject.values():
+    for grades in by_subject.values():#loop over subjects 
         total += sum(grades)
         count += len(grades)
     return total / count
@@ -185,14 +187,14 @@ report_grade("Albert Einstein", "Math", 75)
 
 report_grade("Albert Einstein", "Math", 65)
 report_grade("Albert Einstein", "Gym", 90)
-report_grade("Albert Einstein", "Gym", 95)
+report_grade("Albert Einstein", "Gym", 95)#('Albert Einstein', defaultdict(<class 'list'>, {'Math': [75, 65], 'Gym': [90, 95]}), [90, 95])
 
 
 print(average_grade("Albert Einstein"))
 
 
 # Example 6
-class WeightedGradebook:
+class WeightedGradebook:#incorparated functions in 1 class
     def __init__(self):
         self._grades = {}
 
@@ -222,7 +224,7 @@ class WeightedGradebook:
 
 
 # Example 8
-book = WeightedGradebook()
+book = WeightedGradebook()#uses class with extra var weight
 book.add_student("Albert Einstein")
 book.report_grade("Albert Einstein", "Math", 75, 0.05)
 book.report_grade("Albert Einstein", "Math", 65, 0.15)
@@ -233,19 +235,20 @@ print(book.average_grade("Albert Einstein"))
 
 
 # Example 9
-grades = []
+grades = []#define var as list
 grades.append((95, 0.45))
 grades.append((85, 0.55))
-total = sum(score * weight for score, weight in grades)
-total_weight = sum(weight for _, weight in grades)
+total = sum(score * weight for score, weight in grades)#expression and loop in sum function
+total_weight = sum(weight for _, weight in grades)#direct way to use function on data iterable by sum
 average_grade = total / total_weight
 print(average_grade)
 
 
 # Example 10
-grades = []
+grades = []#easy expand list of tuples with extra var
 grades.append((95, 0.45, "Great job"))
 grades.append((85, 0.55, "Better next time"))
+print(grades)#[(95, 0.45, 'Great job'), (85, 0.55, 'Better next time')]
 total = sum(score * weight for score, weight, _ in grades)
 total_weight = sum(weight for _, weight, _ in grades)
 average_grade = total / total_weight
@@ -255,15 +258,15 @@ print(average_grade)
 # Example 11
 from collections import namedtuple
 
-Grade = namedtuple("Grade", ("score", "weight"))
+Grade = namedtuple("Grade", ("score", "weight"))#define structure of grade
 
 
 # Example 12
 class Subject:
     def __init__(self):
-        self._grades = []
+        self._grades = []#define list
 
-    def report_grade(self, score, weight):
+    def report_grade(self, score, weight):#add tuple to list
         self._grades.append(Grade(score, weight))
 
     def average_grade(self):
@@ -276,7 +279,7 @@ class Subject:
 
 # Example 13
 class Student:
-    def __init__(self):
+    def __init__(self):#create object of dict type with default dict with interaction to othre class methods
         self._subjects = defaultdict(Subject)
 
     def get_subject(self, name):
@@ -291,7 +294,7 @@ class Student:
 
 
 # Example 14
-class Gradebook:
+class Gradebook:#set an object as dict in overall class
     def __init__(self):
         self._students = defaultdict(Student)
 
@@ -300,7 +303,7 @@ class Gradebook:
 
 
 # Example 15
-book = Gradebook()
+book = Gradebook()#instanciated overall class with links to other class/methods
 albert = book.get_student("Albert Einstein")
 math = albert.get_subject("Math")
 math.report_grade(75, 0.05)

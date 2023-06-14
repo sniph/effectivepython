@@ -52,14 +52,15 @@ class MyBaseClass:
         self.value = value
 
 class MyChildClass(MyBaseClass):
-    def __init__(self):
-        MyBaseClass.__init__(self, 5)
+    def __init__(self):#gets value from parents class
+        MyBaseClass.__init__(self, 5)#add value to var in parent class
 
     def times_two(self):
         return self.value * 2
 
 foo = MyChildClass()
 assert foo.times_two() == 10
+print(foo.times_two())#10
 
 
 # Example 2
@@ -73,20 +74,20 @@ class PlusFive:
 
 
 # Example 3
-class OneWay(MyBaseClass, TimesTwo, PlusFive):
+class OneWay(MyBaseClass, TimesTwo, PlusFive):#class with link to other classes
     def __init__(self, value):
-        MyBaseClass.__init__(self, value)
-        TimesTwo.__init__(self)
-        PlusFive.__init__(self)
-
+        MyBaseClass.__init__(self, value)#orig class with link to parent
+        TimesTwo.__init__(self)#independent class
+        PlusFive.__init__(self)#independent class
+        
 
 # Example 4
-foo = OneWay(5)
-print('First ordering value is (5 * 2) + 5 =', foo.value)
+foo = OneWay(5)#call overview class
+print('First ordering value is (5 * 2) + 5 =', foo.value)#init value from orig class used with different methods
 
 
 # Example 5
-class AnotherWay(MyBaseClass, PlusFive, TimesTwo):
+class AnotherWay(MyBaseClass, PlusFive, TimesTwo):#overview class link to other classes
     def __init__(self, value):
         MyBaseClass.__init__(self, value)
         TimesTwo.__init__(self)
@@ -94,30 +95,34 @@ class AnotherWay(MyBaseClass, PlusFive, TimesTwo):
 
 
 # Example 6
-bar = AnotherWay(5)
+bar = AnotherWay(5)#call overview class as new class order args not relevant for result
 print('Second ordering value is', bar.value)
 
 
 # Example 7
-class TimesSeven(MyBaseClass):
+class TimesSeven(MyBaseClass):#class with link to parent
     def __init__(self, value):
         MyBaseClass.__init__(self, value)
         self.value *= 7
 
-class PlusNine(MyBaseClass):
+class PlusNine(MyBaseClass):#class with link to parent
     def __init__(self, value):
         MyBaseClass.__init__(self, value)
         self.value += 9
 
 
 # Example 8
-class ThisWay(TimesSeven, PlusNine):
+class ThisWay(TimesSeven, PlusNine):#overview class with link to classes
     def __init__(self, value):
         TimesSeven.__init__(self, value)
         PlusNine.__init__(self, value)
 
+a=TimesSeven(5)
+print(a.value)#35
+b=PlusNine(5)
+print(b.value)#14
 foo = ThisWay(5)
-print('Should be (5 * 7) + 9 = 44 but is', foo.value)
+print('Should be (5 * 7) + 9 = 44 but is', foo.value)#Should be (5 * 7) + 9 = 44 but is 14 => var seems to be overwritten
 
 
 # Example 9
@@ -125,12 +130,12 @@ class MyBaseClass:
     def __init__(self, value):
         self.value = value
 
-class TimesSevenCorrect(MyBaseClass):
+class TimesSevenCorrect(MyBaseClass):#first in stack last executed
     def __init__(self, value):
         super().__init__(value)
         self.value *= 7
 
-class PlusNineCorrect(MyBaseClass):
+class PlusNineCorrect(MyBaseClass):#second in stack lifo system so first add then multiply
     def __init__(self, value):
         super().__init__(value)
         self.value += 9
@@ -142,18 +147,24 @@ class GoodWay(TimesSevenCorrect, PlusNineCorrect):
         super().__init__(value)
 
 foo = GoodWay(5)
-print('Should be 7 * (5 + 9) = 98 and is', foo.value)
+print('Should be 7 * (5 + 9) = 98 and is', foo.value)#Should be 7 * (5 + 9) = 98 and is 98
 
 
 # Example 11
-mro_str = '\n'.join(repr(cls) for cls in GoodWay.mro())
+mro_str = '\n'.join(repr(cls) for cls in GoodWay.mro())#Return a type's method resolution order.
 print(mro_str)
+#<class '__main__.GoodWay'>
+#<class '__main__.TimesSevenCorrect'>
+#<class '__main__.PlusNineCorrect'>
+#<class '__main__.MyBaseClass'>
+#<class 'object'>
 
 
 # Example 12
 class ExplicitTrisect(MyBaseClass):
     def __init__(self, value):
-        super(ExplicitTrisect, self).__init__(value)
+        
+        super(ExplicitTrisect, self).__init__(value)#detailed call of super even same class
         self.value /= 3
 assert ExplicitTrisect(9).value == 3
 
@@ -161,12 +172,12 @@ assert ExplicitTrisect(9).value == 3
 # Example 13
 class AutomaticTrisect(MyBaseClass):
     def __init__(self, value):
-        super(__class__, self).__init__(value)
+        super(__class__, self).__init__(value)#detailed call of super even same class
         self.value /= 3
 
 class ImplicitTrisect(MyBaseClass):
     def __init__(self, value):
-        super().__init__(value)
+        super().__init__(value)#standaard call of super
         self.value /= 3
 
 assert ExplicitTrisect(9).value == 3

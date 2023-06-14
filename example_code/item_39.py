@@ -47,7 +47,7 @@ atexit.register(close_open_files)
 
 
 # Example 1
-class InputData:
+class InputData:#create structure with classes
     def read(self):
         raise NotImplementedError
 
@@ -55,7 +55,7 @@ class InputData:
 # Example 2
 class PathInputData(InputData):
     def __init__(self, path):
-        super().__init__()
+        super().__init__()#call arg class first init/super.init
         self.path = path
 
     def read(self):
@@ -64,12 +64,12 @@ class PathInputData(InputData):
 
 
 # Example 3
-class Worker:
-    def __init__(self, input_data):
+class Worker:#first initialisation of class
+    def __init__(self, input_data):#self contained init
         self.input_data = input_data
         self.result = None
 
-    def map(self):
+    def map(self):#for later extension
         raise NotImplementedError
 
     def reduce(self, other):
@@ -77,7 +77,7 @@ class Worker:
 
 
 # Example 4
-class LineCountWorker(Worker):
+class LineCountWorker(Worker):#takes class worker to extend methods class after class Worker(input_data)
     def map(self):
         data = self.input_data.read()
         self.result = data.count('\n')
@@ -85,6 +85,8 @@ class LineCountWorker(Worker):
     def reduce(self, other):
         self.result += other.result
 
+a=LineCountWorker(Worker)
+print(a)
 
 # Example 5
 import os
@@ -127,7 +129,7 @@ def mapreduce(data_dir):
 import os
 import random
 
-def write_test_files(tmpdir):
+def write_test_files(tmpdir):#create testfile with 100 lines
     os.makedirs(tmpdir)
     for i in range(100):
         with open(os.path.join(tmpdir, str(i)), 'w') as f:
@@ -137,7 +139,7 @@ tmpdir = 'test_inputs'
 write_test_files(tmpdir)
 
 result = mapreduce(tmpdir)
-print(f'There are {result} lines')
+print(f'There are {result} lines')#There are 4360 lines?
 
 
 # Example 10
@@ -145,7 +147,7 @@ class GenericInputData:
     def read(self):
         raise NotImplementedError
 
-    @classmethod
+    @classmethod#use as parser for args of the incorporating class
     def generate_inputs(cls, config):
         raise NotImplementedError
 

@@ -47,7 +47,7 @@ atexit.register(close_open_files)
 
 
 # Example 1
-import subprocess
+import subprocess#example of independed proces flow
 # Enable these lines to make this example work on Windows
 # import os
 # os.environ['COMSPEC'] = 'powershell'
@@ -86,6 +86,8 @@ for _ in range(10):
     # proc = subprocess.Popen(['sleep', '1'], shell=True)
     proc = subprocess.Popen(['sleep', '1'])
     sleep_procs.append(proc)
+    
+print(sleep_procs)
 
 
 # Example 4

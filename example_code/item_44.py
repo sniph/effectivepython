@@ -66,7 +66,8 @@ print('After: ', r0.get_ohms())
 
 
 # Example 3
-r0.set_ohms(r0.get_ohms() - 4e3)
+r0.set_ohms(r0.get_ohms() - 4e3)#10e3-4e3=6e3 make call to method and subtract from result in arg
+                                #use arg as input for set method
 assert r0.get_ohms() == 6e3
 
 
@@ -77,28 +78,32 @@ class Resistor:
         self.voltage = 0
         self.current = 0
 
-r1 = Resistor(50e3)
-r1.ohms = 10e3
+r1 = Resistor(50e3)#init value for ohms
+#r1 = Resistor()#TypeError: Resistor.__init__() missing 1 required positional argument: 'ohms'
+r1.ohms = 10e3 #10000.0 ohms, 0 volts, 0 amps
 print(f'{r1.ohms} ohms, '
       f'{r1.voltage} volts, '
       f'{r1.current} amps')
 
 
 # Example 5
-r1.ohms += 5e3
+r1.ohms += 5e3 #15000.0 ohms, 0 volts, 0 amps can add to last value
 
+print(f'{r1.ohms} ohms, '
+      f'{r1.voltage} volts, '
+      f'{r1.current} amps')
 
 # Example 6
 class VoltageResistance(Resistor):
     def __init__(self, ohms):
-        super().__init__(ohms)
+        super().__init__(ohms)#need super to call parent class in arg
         self._voltage = 0
 
-    @property
+    @property#return the getter version of property decorator
     def voltage(self):
         return self._voltage
 
-    @voltage.setter
+    @voltage.setter#is the setter version of property decorator
     def voltage(self, voltage):
         self._voltage = voltage
         self.current = self._voltage / self.ohms
@@ -106,9 +111,11 @@ class VoltageResistance(Resistor):
 
 # Example 7
 r2 = VoltageResistance(1e3)
-print(f'Before: {r2.current:.2f} amps')
+print(f'Before: {r2.current:.2f} amps')#0/1000 ->0
+print(r2.ohms #set to 1e3 in int of r2 0/1000 ->0
 r2.voltage = 10
-print(f'After:  {r2.current:.2f} amps')
+print(f'After:  {r2.current:.2f} amps')#10/1000->0.01
+print(r2.ohms)
 
 
 # Example 8
@@ -123,23 +130,24 @@ class BoundedResistance(Resistor):
     @ohms.setter
     def ohms(self, ohms):
         if ohms <= 0:
-            raise ValueError(f'ohms must be > 0; got {ohms}')
+            raise ValueError(f'ohms must be > 0; got {ohms}')#raise error through setter method of property decorator
         self._ohms = ohms
 
 
 # Example 9
 try:
     r3 = BoundedResistance(1e3)
-    r3.ohms = 0
+    r3.ohms = 0 #ValueError: ohms must be > 0; got 0
 except:
     logging.exception('Expected')
 else:
     assert False
 
+print(r3.ohms)
 
 # Example 10
 try:
-    BoundedResistance(-5)
+    BoundedResistance(-5) #ValueError: ohms must be > 0; got -5
 except:
     logging.exception('Expected')
 else:
@@ -156,7 +164,7 @@ class FixedResistance(Resistor):
         return self._ohms
 
     @ohms.setter
-    def ohms(self, ohms):
+    def ohms(self, ohms):#cannot set var ohms raise error with if hasattr method
         if hasattr(self, '_ohms'):
             raise AttributeError("Ohms is immutable")
         self._ohms = ohms
@@ -170,7 +178,7 @@ except:
     logging.exception('Expected')
 else:
     assert False
-
+print(r4.ohms)#still 1000 not changed
 
 # Example 13
 class MysteriousResistor(Resistor):
@@ -185,8 +193,10 @@ class MysteriousResistor(Resistor):
 
 
 # Example 14
-r7 = MysteriousResistor(10)
+
+r7 = MysteriousResistor(10)#init with value
 r7.current = 0.01
-print(f'Before: {r7.voltage:.2f}')
-r7.ohms
-print(f'After:  {r7.voltage:.2f}')
+print(f'Before: {r7.voltage:.2f}')#Before: 0.00
+r7.ohms#only call on setter assigns value 10(arg) to vars
+print(r7.ohms)
+print(f'After:  {r7.voltage:.2f}')#After:  0.10

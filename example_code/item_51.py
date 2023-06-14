@@ -53,7 +53,7 @@ def trace_func(func):
     if hasattr(func, 'tracing'):  # Only decorate once
         return func
 
-    @wraps(func)
+    @wraps(func)#decorator to keep info of wrapped function at call .name etc.
     def wrapper(*args, **kwargs):
         result = None
         try:
@@ -86,11 +86,14 @@ class TraceDict(dict):
 
 
 # Example 3
-trace_dict = TraceDict([('hi', 1)])
-trace_dict['there'] = 2
-trace_dict['hi']
+trace_dict = TraceDict()#invokes init with empty dict-> __init__(({},), {}) -> None -> tuple and dict enclosed with ()
+trace_dict = TraceDict([('hi', 1)])#invokes init method -> __init__(({'hi': 1}, [('hi', 1)]), {}) -> None no kwargst ->{}
+                                                                #create arg as dict as part of tuple in rpr method
+
+trace_dict['there'] = 2 #invokes set method -> __setitem__(({'hi': 1, 'there': 2}, 'there', 2), {}) -> None
+trace_dict['hi']#ivokes get method -> __getitem__(({'hi': 1, 'there': 2}, 'hi'), {}) -> 1
 try:
-    trace_dict['does not exist']
+    trace_dict['does not exist']#__getitem__(({}, 'does not exist'), {}) -> KeyError('does not exist') if key not found then empty {} and error as result
 except KeyError:
     pass  # Expected
 else:
@@ -100,7 +103,7 @@ else:
 # Example 4
 import types
 
-trace_types = (
+trace_types = (#var as tuple of types
     types.MethodType,
     types.FunctionType,
     types.BuiltinFunctionType,
@@ -113,8 +116,8 @@ class TraceMeta(type):
         klass = super().__new__(meta, name, bases, class_dict)
 
         for key in dir(klass):
-            value = getattr(klass, key)
-            if isinstance(value, trace_types):
+            value = getattr(klass, key)#call to result class with rpr method as return
+            if isinstance(value, trace_types):#only with set call to type class
                 wrapped = trace_func(value)
                 setattr(klass, key, wrapped)
 
@@ -124,12 +127,13 @@ class TraceMeta(type):
 # Example 5
 class TraceDict(dict, metaclass=TraceMeta):
     pass
-
-trace_dict = TraceDict([('hi', 1)])
-trace_dict['there'] = 2
-trace_dict['hi']
+trace_dict = TraceDict()#__new__((<class '__main__.TraceDict'>,), {}) -> {} returns new method attributes also instance of type style empty {} for key/value
+trace_dict = TraceDict([('hi', 1)])#__new__((<class '__main__.TraceDict'>, [('hi', 1)]), {}) -> {} added call to wrapper and rpr style class
+trace_dict['there'] = 2#set object 
+trace_dict['hi']#__getitem__(({'hi': 1, 'there': 2}, 'hi'), {}) -> 1 return without extended type info
 try:
-    trace_dict['does not exist']
+    trace_dict['does not exist']#return without type info with raise of error
+                        #__getitem__(({'hi': 1, 'there': 2}, 'does not exist'), {}) -> KeyError('does not exist')
 except KeyError:
     pass  # Expected
 else:
@@ -150,8 +154,41 @@ except:
     logging.exception('Expected')
 else:
     assert False
+#-----------------------------------------------------
+try:
+    class OtherMeta(type):
+        pass
+    
+except:
+    logging.exception('Expected')
+else:
+    assert False#AssertionError so this would work
+    
+#--------------------------------------------
+try:
 
+    
+    #class SimpleDict(dict, metaclass=OtherMeta):
+    class SimpleDict(dict, metaclass=TraceMeta):
+        pass
+    
 
+except:
+    logging.exception('Expected')
+else:
+    assert False #this would work AssertionError   
+#--------------------------------------
+try:
+
+    
+    #class TraceDict(SimpleDict, metaclass=TraceMeta):
+    class TraceDict(SimpleDict, metaclass=TraceMeta):
+        pass
+except:
+    logging.exception('Expected')
+else:
+    assert False# this would work AssertionError
+   
 # Example 7
 class TraceMeta(type):
     def __new__(meta, name, bases, class_dict):
@@ -171,18 +208,23 @@ class OtherMeta(TraceMeta):
 class SimpleDict(dict, metaclass=OtherMeta):
     pass
 
-class TraceDict(SimpleDict, metaclass=TraceMeta):
+#class TraceDict(Dict, metaclass=TraceMeta):#NameError: name 'Dict' is not defined. Did you mean: 'dict'? Dict already definded as arg
+    #pass
+
+class TraceDict(SimpleDict, metaclass=TraceMeta):#__init_subclass__((), {}) -> None reference to class with Dict in arg
     pass
 
-trace_dict = TraceDict([('hi', 1)])
+trace_dict = TraceDict([('hi', 1)])#__new__((<class '__main__.TraceDict'>, [('hi', 1)]), {}) -> {}
 trace_dict['there'] = 2
-trace_dict['hi']
+trace_dict['hi']#__getitem__(({'hi': 1, 'there': 2}, 'hi'), {}) -> 1
 try:
-    trace_dict['does not exist']
+    trace_dict['does not exist']#__getitem__(({'hi': 1, 'there': 2}, 'does not exist'), {}) -> KeyError('does not exist')
 except KeyError:
     pass  # Expected
 else:
     assert False
+
+
 
 
 # Example 8
@@ -199,7 +241,7 @@ print(MyClass.extra_param)
 
 
 # Example 9
-def trace(klass):
+def trace(klass):#trace will be decorator for init of classes for adding types
     for key in dir(klass):
         value = getattr(klass, key)
         if isinstance(value, trace_types):
@@ -210,14 +252,14 @@ def trace(klass):
 
 # Example 10
 @trace
-class TraceDict(dict):
+class TraceDict(dict):#metaclass type incured through decorator
     pass
 
-trace_dict = TraceDict([('hi', 1)])
+trace_dict = TraceDict([('hi', 1)])#__new__((<class '__main__.TraceDict'>, [('hi', 1)]), {}) -> {}
 trace_dict['there'] = 2
-trace_dict['hi']
+trace_dict['hi']#__getitem__(({'hi': 1, 'there': 2}, 'hi'), {}) -> 1
 try:
-    trace_dict['does not exist']
+    trace_dict['does not exist']#__getitem__(({'hi': 1, 'there': 2}, 'does not exist'), {}) -> KeyError('does not exist')
 except KeyError:
     pass  # Expected
 else:
@@ -229,14 +271,14 @@ class OtherMeta(type):
     pass
 
 @trace
-class TraceDict(dict, metaclass=OtherMeta):
+class TraceDict(dict, metaclass=OtherMeta):#added type only pass else trace type
     pass
 
-trace_dict = TraceDict([('hi', 1)])
+trace_dict = TraceDict([('hi', 1)])#__new__((<class '__main__.TraceDict'>, [('hi', 1)]), {}) -> {}
 trace_dict['there'] = 2
-trace_dict['hi']
+trace_dict['hi']#__getitem__(({'hi': 1, 'there': 2}, 'hi'), {}) -> 1
 try:
-    trace_dict['does not exist']
+    trace_dict['does not exist']#__getitem__(({'hi': 1, 'there': 2}, 'does not exist'), {}) -> KeyError('does not exist')
 except KeyError:
     pass  # Expected
 else:

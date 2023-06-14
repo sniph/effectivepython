@@ -92,26 +92,30 @@ print(f'Counter should be {expected}, got {found}')
 
 
 # Example 4
-counter.count += 1
+counter.count += 1#call counter +1
 
 
 # Example 5
-value = getattr(counter, 'count')
-result = value + 1
-setattr(counter, 'count', result)
+value = getattr(counter, 'count')#
+result = value + 1#calls counter +1
+setattr(counter, 'count', result)#set the new counter
 
 
 # Example 6
 # Running in Thread A
-value_a = getattr(counter, 'count')
+value_a = getattr(counter, 'count')#a ,b stay the same point to sam reference
+print(value_a)
 # Context switch to Thread B
 value_b = getattr(counter, 'count')
+print(value_b)
 result_b = value_b + 1
+print(value_b)
 setattr(counter, 'count', result_b)
 # Context switch back to Thread A
 result_a = value_a + 1
+print(value_a)
 setattr(counter, 'count', result_a)
-
+print(value_a)
 
 # Example 7
 from threading import Lock
@@ -139,6 +143,6 @@ for i in range(5):
 for thread in threads:
     thread.join()
 
-expected = how_many * 5
+expected = how_many * 5#doesn't exceed 10**5 see lock method
 found = counter.count
 print(f'Counter should be {expected}, got {found}')
